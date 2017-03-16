@@ -2,7 +2,7 @@
 <html lang="cn">
 <head>
         <meta charset="utf-8" />
-        <title>Perrie's Home</title>
+        <title>Perrie's Home - tips</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -16,7 +16,7 @@
                 <nav><ul>
                     <li><a href="/category/note.html">note</a></li>
                     <li><a href="/category/review.html">Review</a></li>
-                    <li><a href="/category/tips.html">tips</a></li>
+                    <li class="active"><a href="/category/tips.html">tips</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
@@ -53,73 +53,6 @@
 
 <p>得出结果<code>{"_id": 46}</code></p>                </article>
             </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/replace-type-code-with-statestrategy.html" rel="bookmark"
-                           title="Permalink to Replace Type Code With State/Strategy">Replace Type Code With State/Strategy</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-12-26T20:55:00+08:00">
-                Published: 周一 26 十二月 2016
-        </abbr>
-		<br />
-        <abbr class="modified" title="2016-12-28T12:40:00+08:00">
-                Updated: 周三 28 十二月 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/note.html">note</a>.</p>
-
-</footer><!-- /.post-info -->                <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
-但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
-<p>觉得主要思想是：</p>
-<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
-<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
-<p>重构前的代码：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Movie</span>(<span class="n">object</span>):
-
-    <span class="n">REGULAR</span> = <span class="mi">0</span>
-    <span class="n">NEW_RELEASE</span> = <span class="mi">1</span>
-    <span class="n">CHILDRENS</span> = <span class="mi">2</span>
-
-    <span class="n">def</span> <span class="n">__init__ ...</span></pre></div>
-                <a class="readmore" href="/replace-type-code-with-statestrategy.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/my-first-review.html" rel="bookmark"
-                           title="Permalink to My First Review">My First Review</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-12-05T16:20:00+08:00">
-                Published: 周一 05 十二月 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/review.html">Review</a>.</p>
-
-</footer><!-- /.post-info -->                <p>好吧，打扫一下，准备吧github page重新用起来</p>
-<p>这次没用hexo，用了pelican啦~</p>
-                <a class="readmore" href="/my-first-review.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>
