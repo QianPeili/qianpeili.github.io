@@ -2,7 +2,7 @@
 <html lang="cn">
 <head>
         <meta charset="utf-8" />
-        <title>Perrie's Home - tips</title>
+        <title>Perrie's Home - Tips</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -16,13 +16,59 @@
                 <nav><ul>
                     <li><a href="/category/note.html">note</a></li>
                     <li><a href="/category/review.html">Review</a></li>
-                    <li class="active"><a href="/category/tips.html">tips</a></li>
+                    <li class="active"><a href="/category/tips.html">Tips</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html">用mongodb统计去重后的数量</a></h1>
+                    <h1 class="entry-title"><a href="/unicodexiao-ji-qiao.html">unicode小技巧</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-04-07T10:20:00+08:00">
+                Published: 周五 07 四月 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
+        </address>
+<p>In <a href="/category/tips.html">Tips</a>.</p>
+
+</footer><!-- /.post-info --><p>今天遇到一个问题</p>
+<p>在mysql查询日志时，发现一些unicode字符串存储变成了</p>
+<div class="highlight"><pre><span></span>u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
+</pre></div>
+
+
+<p>这个形式，手动加<code>\</code>虽然可行，但毕竟不是长久的办法</p>
+<p>所以最好的办法是将字符串中的内容，根据unicode格式转换成unicode</p>
+<p>代码如下:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>   
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42&quot;</span>  
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;\u(.{4})&quot;</span><span class="p">)</span>    
+<span class="n">maps</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>   
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">tmp</span>
+<span class="k">print</span> <span class="n">s</span>
+</pre></div>
+
+
+<p>就会输出原先代表的文字意思了</p>
+<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html" rel="bookmark"
+                           title="Permalink to 用mongodb统计去重后的数量">用mongodb统计去重后的数量</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-03-16T18:11:00+08:00">
                 Published: 周四 16 三月 2017
@@ -33,7 +79,7 @@
         </address>
 <p>In <a href="/category/tips.html">tips</a>.</p>
 
-</footer><!-- /.post-info --><p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
+</footer><!-- /.post-info -->                <p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
 <div class="highlight"><pre><span></span>{
     _id: ObjectId(),
     uid: 1014,
@@ -51,8 +97,12 @@
 </pre></div>
 
 
-<p>得出结果<code>{"_id": 46}</code></p>                </article>
-            </aside><!-- /#featured -->
+<p>得出结果<code>{"_id": 46}</code></p>
+                <a class="readmore" href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>
