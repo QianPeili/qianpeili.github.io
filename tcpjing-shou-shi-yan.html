@@ -2,7 +2,7 @@
 <html lang="cn">
 <head>
         <meta charset="utf-8" />
-        <title>Perrie's Home - perrie</title>
+        <title>tcp经受时延</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -14,15 +14,20 @@
         <header id="banner" class="body">
                 <h1><a href="/">Perrie's Home </a></h1>
                 <nav><ul>
-                    <li><a href="/category/note.html">note</a></li>
+                    <li class="active"><a href="/category/note.html">note</a></li>
                     <li><a href="/category/review.html">Review</a></li>
                     <li><a href="/category/tips.html">Tips</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tcpjing-shou-shi-yan.html" rel="bookmark"
+           title="Permalink to tcp经受时延">tcp经受时延</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/tcpjing-shou-shi-yan.html">tcp经受时延</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-05-20T16:15:00+08:00">
                 Published: 周六 20 五月 2017
@@ -33,7 +38,7 @@
         </address>
 <p>In <a href="/category/note.html">note</a>.</p>
 
-</footer><!-- /.post-info --><p>学 <code>TCP/IP</code> 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 <code>tcpdump</code> ，就想着实战抓一下 <code>tcp</code> 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个
+</footer><!-- /.post-info -->      <p>学 <code>TCP/IP</code> 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 <code>tcpdump</code> ，就想着实战抓一下 <code>tcp</code> 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个
  <code>POST</code> 请求，抓到如下信息：</p>
 <div class="highlight"><pre><span></span><span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904647</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">],</span> <span class="n">seq</span> <span class="mi">2090421259</span><span class="o">,</span> <span class="n">win</span> <span class="mi">64240</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">8</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
 <span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904699</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">2303886283</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">2090421260</span><span class="o">,</span> <span class="n">win</span> <span class="mi">29200</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">7</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
@@ -110,181 +115,11 @@
 </pre></div>
 
 
-<p>在上面，我们已经可以看到四次挥手了，实验成功（就是他妈有点水- -）！</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<p>在上面，我们已经可以看到四次挥手了，实验成功（就是他妈有点水- -）！</p>
+    </div><!-- /.entry-content -->
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/tcpdumpde-shi-yong-shi-li.html" rel="bookmark"
-                           title="Permalink to tcpdump的使用实例">tcpdump的使用实例</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-05-20T13:46:00+08:00">
-                Published: 周六 20 五月 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/note.html">note</a>.</p>
-
-</footer><!-- /.post-info -->                <p>给出了一些tcpdump的使用例子，实践才是学习的好办法~</p>
-                <a class="readmore" href="/tcpdumpde-shi-yong-shi-li.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/unicodexiao-ji-qiao.html" rel="bookmark"
-                           title="Permalink to unicode小技巧">unicode小技巧</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-04-07T10:20:00+08:00">
-                Published: 周五 07 四月 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/tips.html">Tips</a>.</p>
-
-</footer><!-- /.post-info -->                <p>今天遇到一个问题</p>
-<p>在mysql查询日志时，发现一些unicode字符串存储变成了</p>
-<div class="highlight"><pre><span></span>u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
-</pre></div>
-
-
-<p>这个形式，手动加<code>\</code>虽然可行，但毕竟不是长久的办法</p>
-<p>所以最好的办法是将字符串中的内容，根据unicode格式转换成unicode</p>
-<p>代码如下:</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>   
-<span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42&quot;</span>  
-<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;\u(.{4})&quot;</span><span class="p">)</span>    
-<span class="n">maps</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>   
-<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
-    <span class="n">s</span> <span class="o">+=</span> <span class="n">tmp</span>
-<span class="k">print</span> <span class="n">s</span>
-</pre></div>
-
-
-<p>就会输出原先代表的文字意思了</p>
-<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>
-                <a class="readmore" href="/unicodexiao-ji-qiao.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html" rel="bookmark"
-                           title="Permalink to 用mongodb统计去重后的数量">用mongodb统计去重后的数量</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-03-16T18:11:00+08:00">
-                Published: 周四 16 三月 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/tips.html">tips</a>.</p>
-
-</footer><!-- /.post-info -->                <p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
-<div class="highlight"><pre><span></span>{
-    _id: ObjectId(),
-    uid: 1014,
-    score: 10
-}
-</pre></div>
-
-
-<p>要求统计参与活动的玩家中，分数大于等于10的人数。</p>
-<div class="highlight"><pre><span></span><span class="x">var num = db.activity_log.aggregate([</span>
-<span class="x">    </span><span class="cp">{</span><span class="nv">$match</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;score&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;$ge&quot;</span><span class="o">:</span> <span class="m">10</span><span class="cp">}}}</span><span class="x">,  # 筛选</span>
-<span class="x">    </span><span class="cp">{</span><span class="nv">$group</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;users&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="nv">$addToSet</span><span class="o">:</span> <span class="s2">&quot;$uid&quot;</span><span class="cp">}}}</span><span class="x">,    # 将玩家ID放入一个集合，作去重</span>
-<span class="x">    </span><span class="cp">{</span><span class="s2">&quot;$project&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;$size&quot;</span><span class="o">:</span> <span class="s2">&quot;$users&quot;</span><span class="cp">}}}</span><span class="x">    # 求集合大小</span>
-<span class="x">]);</span>
-</pre></div>
-
-
-<p>得出结果<code>{"_id": 46}</code></p>
-                <a class="readmore" href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/replace-type-code-with-statestrategy.html" rel="bookmark"
-                           title="Permalink to Replace Type Code With State/Strategy">Replace Type Code With State/Strategy</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-12-26T20:55:00+08:00">
-                Published: 周一 26 十二月 2016
-        </abbr>
-		<br />
-        <abbr class="modified" title="2016-12-28T12:40:00+08:00">
-                Updated: 周三 28 十二月 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/note.html">note</a>.</p>
-
-</footer><!-- /.post-info -->                <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
-但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
-<p>觉得主要思想是：</p>
-<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
-<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
-<p>重构前的代码：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Movie</span>(<span class="n">object</span>):
-
-    <span class="n">REGULAR</span> = <span class="mi">0</span>
-    <span class="n">NEW_RELEASE</span> = <span class="mi">1</span>
-    <span class="n">CHILDRENS</span> = <span class="mi">2</span>
-
-    <span class="n">def</span> <span class="n">__init__ ...</span></pre></div>
-                <a class="readmore" href="/replace-type-code-with-statestrategy.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/my-first-review.html" rel="bookmark"
-                           title="Permalink to My First Review">My First Review</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-12-05T16:20:00+08:00">
-                Published: 周一 05 十二月 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/review.html">Review</a>.</p>
-
-</footer><!-- /.post-info -->                <p>好吧，打扫一下，准备吧github page重新用起来</p>
-<p>这次没用hexo，用了pelican啦~</p>
-                <a class="readmore" href="/my-first-review.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>
