@@ -1,44 +1,75 @@
 <!DOCTYPE html>
 <html lang="cn">
 <head>
-        <meta charset="utf-8" />
-        <title>用mongodb统计去重后的数量</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <meta charset="utf-8">
+    <title>用mongodb统计去重后的数量 - Perrie's Home</title>
+    <meta name="description" content="">
+    <meta name="author" content="perrie">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="/theme/html5.js"></script>
+    <![endif]-->
+
+
+    <!-- Le styles -->
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet">
+    <link href="/theme/local.css" rel="stylesheet">
+    <link href="/theme/pygments.css" rel="stylesheet">
+    <link href="/theme/font-awesome.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic|Alegreya+SC' rel='stylesheet' type='text/css'>
+
 </head>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Perrie's Home </a></h1>
-                <nav><ul>
-                    <li><a href="/category/note.html">note</a></li>
-                    <li><a href="/category/review.html">Review</a></li>
-                    <li class="active"><a href="/category/tips.html">Tips</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
-    <header>
-      <h1 class="entry-title">
-        <a href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html" rel="bookmark"
-           title="Permalink to 用mongodb统计去重后的数量">用mongodb统计去重后的数量</a></h1>
-    </header>
+<body>
+<header class="blog-header">
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span9">
+	<a href="" class="brand">Perrie's Home</a>
+      </div>
 
-    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-03-16T18:11:00+08:00">
-                Published: 周四 16 三月 2017
-        </abbr>
+      <div class="span3" id="blog-nav">
+	<ul class="nav nav-pills pull-right">
+	    <li >
+	      <a href="/category/note.html ">note</a>
+	    <li >
+	      <a href="/category/review.html ">Review</a>
+	    <li  class="active" >
+	      <a href="/category/tips.html ">Tips</a>
+	</ul>
+      </div>
+    </div> <!-- End of fluid row-->
+  </div>   <!-- End of Container-->
+</header>
+    
+<div class="container">
+    <div class="content">
+    <div class="row-fluid">
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/perrie.html">perrie</a>
-        </address>
-<p>In <a href="/category/tips.html">tips</a>.</p>
+        <div class="span10">
+    <div class='article'>
+      <div class="row-fluid">
+           <div class="content-title span9">
+             <h1>用mongodb统计去重后的数量</h1>
+           </div>
+      </div>
+    <div class="row-fluid">
+      <div class="span2">
+<p>周四 16 三月 2017 </p>
 
-</footer><!-- /.post-info -->      <p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
+<p style="text-align: left;">
+Filed under <a href="/category/tips.html">tips</a>
+</p>
+<p style="text-align: left;">
+</p>
+<p>
+</p>
+      </div>
+      
+      <div class="span8">
+	<p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
 <div class="highlight"><pre><span></span>{
     _id: ObjectId(),
     uid: 1014,
@@ -57,36 +88,68 @@
 
 
 <p>得出结果<code>{"_id": 46}</code></p>
-    </div><!-- /.entry-content -->
+	<hr />
+      </div>
+    </div>
+    <div class="span10">
+      <h3>Comments</h3>
+    
+    </div>  
+    </div>
+        </div>
+        
+        
+    </div>     </div> </div>
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                            <li><a href="https://github.com/QianPeili">Github</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
+<!--footer-->
+<div class="container">
+  <div class="well" style="background-color: #E9EFF6">
+    <div id="blog-footer">
+      <div class="row-fluid">
+	<div class="social span2" align="center" id="socialist">
+	  <ul class="nav nav-list">
+	    <li class="nav-header">
+	      Social
+	    </li>
+	    <li><a href="https://github.com/QianPeili"><i class="icon-github" style="color: #1f334b"></i>github</a></li>
+	    <li><a href="mailto:qianperry@outlook.com"><i class="icon-email" style="color: #1f334b"></i>email</a></li>
 
-                            <li><a href="#">No</a></li>
-                            <li><a href="#">No</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+	  </ul>
+	</div>
+	<div class="site-nav span2" align="center">
+          <ul class="nav nav-list" id="site-links">
+            <li class="nav-header"> 
+              Site
+            </li>
+            <li><a href=""><i class="icon-home" style="color: #1f334b">
+                </i>Home</a></li>
+            <li><a href="/archives.html"><i class="icon-list" style="color: #1f334b">
+                </i>Archives</a></li>
+	    <li><a href="/tags.html"><i class="icon-tags" style="color: #1f334b">
+                </i>Tags</a></li>
+	    
+	  </ul>
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+        </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+      </div> <!--end of fluid row-->
+    </div> <!--end of blog-footer-->
+    <hr />
+    <p align="center"><a href="">Perrie's Home</a>
+      &copy; perrie
+    Powered by <a href="https://github.com/getpelican/pelican">Pelican</a> and
+        <a href="https://twitter.github.com/bootstrap">Twitter Bootstrap</a>. 
+        Icons by <a href="https://fortawesome.github.com/Font-Awesome">Font Awesome</a> and 
+        <a href="https://gregoryloucas.github.com/Font-Awesome-More">Font Awesome More</a></p>
+
+  </div> <!--end of well -->
+</div> <!--end of container -->
+
+<!--/footer-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+
+
 
 </body>
 </html>
