@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Pelican Blog</title><link href="/" rel="alternate"></link><link href="/feeds/review.atom.xml" rel="self"></link><id>/</id><updated>2016-12-05T16:20:00+00:00</updated><entry><title>My First Review</title><link href="/my-first-review.html" rel="alternate"></link><published>2016-12-05T16:20:00+00:00</published><updated>2016-12-05T16:20:00+00:00</updated><author><name></name></author><id>tag:,2016-12-05:my-first-review.html</id><summary type="html">&lt;p&gt;好吧，打扫一下，准备吧github page重新用起来&lt;/p&gt;
+&lt;p&gt;这次没用hexo，用了pelican啦~&lt;/p&gt;</summary></entry></feed>

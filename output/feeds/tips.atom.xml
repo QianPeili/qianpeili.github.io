@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Pelican Blog</title><link href="/" rel="alternate"></link><link href="/feeds/tips.atom.xml" rel="self"></link><id>/</id><updated>2017-04-07T10:20:00+00:00</updated><entry><title>unicode小技巧</title><link href="/unicodexiao-ji-qiao.html" rel="alternate"></link><published>2017-04-07T10:20:00+00:00</published><updated>2017-04-07T10:20:00+00:00</updated><author><name></name></author><id>tag:,2017-04-07:unicodexiao-ji-qiao.html</id><summary type="html">&lt;p&gt;今天遇到一个问题&lt;/p&gt;
+&lt;p&gt;在mysql查询日志时，发现一些unicode字符串存储变成了&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这个形式，手动加&lt;code&gt;\&lt;/code&gt;虽然可行，但毕竟不是长久的办法&lt;/p&gt;
+&lt;p&gt;所以最好的办法是将字符串中的内容，根据unicode格式转换成unicode&lt;/p&gt;
+&lt;p&gt;代码如下:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;re&lt;/span&gt;   
+&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42&amp;quot;&lt;/span&gt;  
+&lt;span class="n"&gt;pattern&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;\u(.{4})&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;    
+&lt;span class="n"&gt;maps&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;findall&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;   
+&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;  
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;maps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;tmp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;unichr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;tmp&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;就会输出原先代表的文字意思了&lt;/p&gt;
+&lt;p&gt;注： 以上是代码是python2版本， python3需要把&lt;code&gt;unichr&lt;/code&gt;改成&lt;code&gt;chr&lt;/code&gt;&lt;/p&gt;</summary></entry><entry><title>用mongodb统计去重后的数量</title><link href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html" rel="alternate"></link><published>2017-03-16T18:11:00+00:00</published><updated>2017-03-16T18:11:00+00:00</updated><author><name></name></author><id>tag:,2017-03-16:yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html</id><summary type="html">&lt;p&gt;假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{
+    _id: ObjectId(),
+    uid: 1014,
+    score: 10
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;要求统计参与活动的玩家中，分数大于等于10的人数。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="x"&gt;var num = db.activity_log.aggregate([&lt;/span&gt;
+&lt;span class="x"&gt;    &lt;/span&gt;&lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="nv"&gt;$match&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;score&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;$ge&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="cp"&gt;}}}&lt;/span&gt;&lt;span class="x"&gt;,  # 筛选&lt;/span&gt;
+&lt;span class="x"&gt;    &lt;/span&gt;&lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="nv"&gt;$group&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_id&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;users&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="nv"&gt;$addToSet&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;$uid&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;}}}&lt;/span&gt;&lt;span class="x"&gt;,    # 将玩家ID放入一个集合，作去重&lt;/span&gt;
+&lt;span class="x"&gt;    &lt;/span&gt;&lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;$project&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_id&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;$size&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;$users&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;}}}&lt;/span&gt;&lt;span class="x"&gt;    # 求集合大小&lt;/span&gt;
+&lt;span class="x"&gt;]);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;得出结果&lt;code&gt;{"_id": 46}&lt;/code&gt;&lt;/p&gt;</summary></entry></feed>

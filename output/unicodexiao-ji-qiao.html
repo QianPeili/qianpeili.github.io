@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>unicode小技巧</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog </a></h1>
+                <nav><ul>
+                    <li><a href="/category/note.html">note</a></li>
+                    <li><a href="/category/review.html">Review</a></li>
+                    <li class="active"><a href="/category/tips.html">Tips</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/unicodexiao-ji-qiao.html" rel="bookmark"
+           title="Permalink to unicode小技巧">unicode小技巧</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-04-07T10:20:00+00:00">
+                Published: 周五 07 四月 2017
+        </abbr>
+
+<p>In <a href="/category/tips.html">Tips</a>.</p>
+
+</footer><!-- /.post-info -->      <p>今天遇到一个问题</p>
+<p>在mysql查询日志时，发现一些unicode字符串存储变成了</p>
+<div class="highlight"><pre><span></span>u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
+</pre></div>
+
+
+<p>这个形式，手动加<code>\</code>虽然可行，但毕竟不是长久的办法</p>
+<p>所以最好的办法是将字符串中的内容，根据unicode格式转换成unicode</p>
+<p>代码如下:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>   
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42&quot;</span>  
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;\u(.{4})&quot;</span><span class="p">)</span>    
+<span class="n">maps</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>   
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">tmp</span>
+<span class="k">print</span> <span class="n">s</span>
+</pre></div>
+
+
+<p>就会输出原先代表的文字意思了</p>
+<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

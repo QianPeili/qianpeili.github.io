@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Replace Type Code With State/Strategy</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/note.html">note</a></li>
+                    <li><a href="/category/review.html">Review</a></li>
+                    <li><a href="/category/tips.html">Tips</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/replace-type-code-with-statestrategy.html" rel="bookmark"
+           title="Permalink to Replace Type Code With State/Strategy">Replace Type Code With State/Strategy</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-12-26T20:55:00+00:00">
+                Published: 周一 26 十二月 2016
+        </abbr>
+		<br />
+        <abbr class="modified" title="2016-12-28T12:40:00+00:00">
+                Updated: 周三 28 十二月 2016
+        </abbr>
+
+<p>In <a href="/category/note.html">note</a>.</p>
+
+</footer><!-- /.post-info -->      <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
+但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
+<p>觉得主要思想是：</p>
+<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
+<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
+<p>重构前的代码：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Movie</span>(<span class="n">object</span>):
+
+    <span class="n">REGULAR</span> = <span class="mi">0</span>
+    <span class="n">NEW_RELEASE</span> = <span class="mi">1</span>
+    <span class="n">CHILDRENS</span> = <span class="mi">2</span>
+
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">title</span>, <span class="n">price_code</span>):
+        <span class="k">self</span>.<span class="n">title</span> = <span class="n">title</span>
+        <span class="k">self</span>.<span class="n">price_code</span> = <span class="n">price_code</span>
+
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="n">result</span> = <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="k">self</span>.<span class="n">price_code</span> == <span class="k">self</span>.<span class="n">REGULAR:</span>
+            <span class="n">result</span> += <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">days_rented</span> &gt; <span class="mi">2</span>:
+                <span class="n">result</span> += (<span class="n">days_rented</span> - <span class="mi">2</span>) * <span class="mf">1.5</span>
+        <span class="n">elif</span> <span class="k">self</span>.<span class="n">price_code</span> == <span class="k">self</span>.<span class="n">NEW_RELEASE:</span>
+            <span class="n">result</span> += <span class="n">days_rented</span> * <span class="mi">3</span>
+        <span class="n">elif</span> <span class="k">self</span>.<span class="n">price_code</span> == <span class="k">self</span>.<span class="n">CHILDRENS:</span>
+            <span class="n">result</span> += <span class="mf">1.5</span>
+            <span class="k">if</span> <span class="n">days_rented</span> &gt; <span class="mi">3</span>:
+                <span class="n">result</span> += (<span class="n">days_rented</span> - <span class="mi">3</span>) * <span class="mf">1.5</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="n">movie</span> = <span class="n">Movie</span>(<span class="s">&quot;Some Movie&quot;</span>, <span class="mi">1</span>)
+<span class="nb">print</span> <span class="n">movie</span>.<span class="n">get_charge</span>(<span class="mi">5</span>)
+</pre></div>
+
+
+<p>第一步：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Movie</span>(<span class="n">object</span>):
+
+    <span class="n">REGULAR</span> = <span class="mi">0</span>
+    <span class="n">NEW_RELEASE</span> = <span class="mi">1</span>
+    <span class="n">CHILDRENS</span> = <span class="mi">2</span>
+
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">title</span>, <span class="n">price_code</span>):
+        <span class="k">self</span>.<span class="n">title</span> = <span class="n">title</span>
+        <span class="k">self</span>.<span class="n">price</span> = <span class="n">Price</span>(<span class="n">price_code</span>)
+
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="k">return</span> <span class="k">self</span>.<span class="n">price</span>.<span class="n">get_charge</span>(<span class="n">days_rented</span>)
+
+
+<span class="k">class</span> <span class="n">Price</span>(<span class="n">object</span>):
+
+    <span class="n">_price_code</span> = <span class="mi">0</span>
+
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">price_code</span>):
+        <span class="k">self</span>.<span class="n">price_code</span> = <span class="n">price_code</span>
+
+    <span class="nv">@property</span>
+    <span class="n">def</span> <span class="n">price_code</span>(<span class="k">self</span>):
+        <span class="k">return</span> <span class="k">self</span>.<span class="n">_price_code</span>
+
+    <span class="nv">@price_code</span>.<span class="n">setter</span>
+    <span class="n">def</span> <span class="n">price_code</span>(<span class="k">self</span>, <span class="nb">value</span>):
+        <span class="k">self</span>.<span class="n">_price_code</span> = <span class="nb">value</span>
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="n">result</span> = <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="k">self</span>.<span class="n">price_code</span> == <span class="n">Movie</span>.<span class="n">REGULAR:</span>
+            <span class="n">result</span> += <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">days_rented</span> &gt; <span class="mi">2</span>:
+                <span class="n">result</span> += (<span class="n">days_rented</span> - <span class="mi">2</span>) * <span class="mf">1.5</span>
+        <span class="n">elif</span> <span class="k">self</span>.<span class="n">price_code</span> == <span class="n">Movie</span>.<span class="n">NEW_RELEASE:</span>
+            <span class="n">result</span> += <span class="n">days_rented</span> * <span class="mi">3</span>
+        <span class="n">elif</span> <span class="k">self</span>.<span class="n">price_code</span> == <span class="n">Movie</span>.<span class="n">CHILDRENS:</span>
+            <span class="n">result</span> += <span class="mf">1.5</span>
+            <span class="k">if</span> <span class="n">days_rented</span> &gt; <span class="mi">3</span>:
+                <span class="n">result</span> += (<span class="n">days_rented</span> - <span class="mi">3</span>) * <span class="mf">1.5</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+<span class="n">movie</span> = <span class="n">Movie</span>(<span class="s">&quot;Some Movie&quot;</span>, <span class="mi">1</span>)
+<span class="nb">print</span> <span class="n">movie</span>.<span class="n">get_charge</span>(<span class="mi">5</span>)
+</pre></div>
+
+
+<p>第二步：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Movie</span>(<span class="n">object</span>):
+
+    <span class="n">REGULAR</span> = <span class="mi">0</span>
+    <span class="n">NEW_RELEASE</span> = <span class="mi">1</span>
+    <span class="n">CHILDRENS</span> = <span class="mi">2</span>
+
+    <span class="n">_price</span> = <span class="n">None</span>
+
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">title</span>, <span class="n">price_code</span>):
+        <span class="k">self</span>.<span class="n">title</span> = <span class="n">title</span>
+        <span class="k">self</span>.<span class="n">price</span> = <span class="n">price_code</span>
+
+    <span class="nv">@property</span>
+    <span class="n">def</span> <span class="n">price</span>(<span class="k">self</span>):
+        <span class="k">return</span> <span class="k">self</span>.<span class="n">_price</span>
+
+    <span class="nv">@price</span>.<span class="n">setter</span>
+    <span class="n">def</span> <span class="n">price</span>(<span class="k">self</span>, <span class="nb">value</span>):
+        <span class="k">if</span> <span class="nb">value</span> == <span class="k">self</span>.<span class="n">REGULAR:</span>
+            <span class="k">self</span>.<span class="n">_price</span> = <span class="n">RegularPrice</span>()
+        <span class="n">elif</span> <span class="nb">value</span> == <span class="k">self</span>.<span class="n">NEW_RELEASE:</span>
+            <span class="k">self</span>.<span class="n">_price</span> = <span class="n">NewReleasePrice</span>()
+        <span class="n">elif</span> <span class="nb">value</span> == <span class="k">self</span>.<span class="n">CHILDRENS:</span>
+            <span class="k">self</span>.<span class="n">_price</span> = <span class="n">ChildrenPrice</span>()
+
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="k">return</span> <span class="k">self</span>.<span class="n">_price</span>.<span class="n">get_charge</span>(<span class="n">days_rented</span>)
+
+
+<span class="k">class</span> <span class="n">Price</span>(<span class="n">object</span>):
+
+    <span class="nv">@property</span>
+    <span class="n">def</span> <span class="n">price_code</span>(<span class="k">self</span>):
+        <span class="k">return</span> <span class="k">self</span>.<span class="n">_price_code</span>
+
+    <span class="nv">@price_code</span>.<span class="n">setter</span>
+    <span class="n">def</span> <span class="n">price_code</span>(<span class="k">self</span>, <span class="nb">value</span>):
+        <span class="k">self</span>.<span class="n">_price_code</span> = <span class="nb">value</span>
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="nb">pass</span>
+
+
+<span class="k">class</span> <span class="n">RegularPrice</span>(<span class="n">Price</span>):
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="n">result</span> = <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">days_rented</span> &gt; <span class="mi">2</span>:
+            <span class="n">result</span> += (<span class="n">days_rented</span> - <span class="mi">2</span>) * <span class="mf">1.5</span>
+
+
+<span class="k">class</span> <span class="n">NewReleasePrice</span>(<span class="n">Price</span>):
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="k">return</span> <span class="n">days_rented</span> * <span class="mi">3</span>
+
+
+<span class="k">class</span> <span class="n">ChildrenPrice</span>(<span class="n">Price</span>):
+
+    <span class="n">def</span> <span class="n">get_charge</span>(<span class="k">self</span>, <span class="n">days_rented</span>):
+        <span class="n">result</span> = <span class="mf">1.5</span>
+        <span class="k">if</span> <span class="n">days_rented</span> &gt; <span class="mi">3</span>:
+            <span class="n">result</span> += (<span class="n">days_rented</span> - <span class="mi">3</span>) * <span class="mf">1.5</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="n">movie</span> = <span class="n">Movie</span>(<span class="s">&quot;Some Movie&quot;</span>, <span class="mi">1</span>)
+<span class="nb">print</span> <span class="n">movie</span>.<span class="n">get_charge</span>(<span class="mi">5</span>)
+</pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

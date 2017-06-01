@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Pelican Blog</title><link href="/" rel="alternate"></link><link href="/feeds/note.atom.xml" rel="self"></link><id>/</id><updated>2017-05-22T18:11:00+00:00</updated><entry><title>Go的依赖管理工具govendor</title><link href="/gode-yi-lai-guan-li-gong-ju-govendor.html" rel="alternate"></link><published>2017-05-22T18:11:00+00:00</published><updated>2017-05-22T18:11:00+00:00</updated><author><name></name></author><id>tag:,2017-05-22:gode-yi-lai-guan-li-gong-ju-govendor.html</id><summary type="html">&lt;p&gt;依赖管理是我接触 go 以来，觉得比较麻烦的事情。
+不过在 go-1.5 版本中，出现了一个 &lt;code&gt;vendor&lt;/code&gt; 的概念，并且 &lt;code&gt;vendor&lt;/code&gt; 作为一个默认功能存在于1.7之后的版本中。&lt;/p&gt;
+&lt;p&gt;vendor的概念就类似于python中的 &lt;code&gt;virtualenv&lt;/code&gt; 建立的 &lt;code&gt;env&lt;/code&gt;，它是一个文件夹，里面存放了项目所用的依赖。如果项目中有个文件 import 了第三方的 package，而这个 package 又存在项目的 vendor 目录中，这个文件编译的时候会从 vendor 中 import 这个 package&lt;/p&gt;
+&lt;p&gt;比如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;GOPATH&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="x"&gt;|   src/&lt;/span&gt;
+&lt;span class="x"&gt;|   |   project/&lt;/span&gt;
+&lt;span class="x"&gt;|   |   |   main.go&lt;/span&gt;
+&lt;span class="x"&gt;|   |   |   vendor/&lt;/span&gt;
+&lt;span class="x"&gt;|   |   |   |   github.com/pkg/sftp/&lt;/span&gt;
+&lt;span class="x"&gt;|   |   |   |   golang.org/x/crypto/ssh/&lt;/span&gt;
+&lt;span class="x"&gt;|   |   |   |   |   agent/&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其中 &lt;code&gt;project/main.go&lt;/code&gt; 中:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="o"&gt;...&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;golang.org/x/crypto/ssh&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;因为项目 project 中有 vendor 目录，并且存在 &lt;code&gt;golang.org/x/crypto/ssh&lt;/code&gt;，所以这一行:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;golang.org/x/crypto/ssh&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在编译的时候会变成:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;project/vendor/golang.org/x/crypto/ssh&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;a href="https://docs.google.com/document/d/1Bz5-UB7g2uPBdOx-rw5t9MxJwkfpx90cqG9AFL0JAYo/edit"&gt;Go 1.5 Vendor Experiment - Google 文档&lt;/a&gt; 这里可以看到 vendor 的详细说明。&lt;/p&gt;
+&lt;h2&gt;Govendor&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;govendor&lt;/code&gt; 是一个管理 vendor 的工具&lt;/p&gt;
+&lt;p&gt;代码地址： &lt;a href="https://github.com/kardianos/govendor"&gt;kardianos/govendor: Go vendor tool that works with the standard vendor file.&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;govendor安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;go get -u -v github.com/kardianos/govendor
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;govendor使用&lt;/h3&gt;
+&lt;p&gt;首先对项目进行初始化&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;govendor init
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然后列出项目所需的依赖&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;govendor list
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;下面是我自己的项目所需的依赖，其中 &lt;code&gt;Bomber&lt;/code&gt; 是当前项目的名称&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; e  github.com/golang/protobuf/proto
+ e  golang.org/x/crypto/bcrypt
+ e  golang.org/x/crypto/blowfish
+ e  gopkg.in/mgo.v2
+ e  gopkg.in/mgo.v2/bson
+ e  gopkg.in/mgo.v2/internal/json
+ e  gopkg.in/mgo.v2/internal/sasl
+ e  gopkg.in/mgo.v2/internal/scram
+pl  Bomber
+ l  Bomber/db
+ l  Bomber/gate
+ l  Bomber/handlers
+ l  Bomber/models
+ l  Bomber/network
+ l  Bomber/protodata
+pl  Bomber/test
+ l  Bomber/tools
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;每个 package 前有个 flag 标记，分别代表：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;+local    (l) packages in your project
++external (e) referenced packages in GOPATH but not in current project
++program  (p) package is a main package
++all      +all packages
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;现在我们把第三方包加入vendor目录中&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;govendor add +e
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;或者单独添加某个包&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;govendor add {package_name}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;当然还可以添加当前项目到 &lt;code&gt;vendor&lt;/code&gt; 中&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;govendor add +l
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;添加当前项目似乎没有太大作用，但是在制作 &lt;code&gt;docker image&lt;/code&gt; 的时候将当前项目加入 vendor 会省事不少。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;然后你会看到项目中的 vendor 目录中，已经把依赖的源码添加进去了。其中还有个 &lt;code&gt;vendor.json&lt;/code&gt; 文件，里面记录了 vendor 目录中包含的 package 信息。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{
+    &amp;quot;comment&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;ignore&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;package&amp;quot;: [
+            ...
+            {
+                &amp;quot;checksumSHA1&amp;quot;: &amp;quot;aiUlobdvi4uVkijyZ856jdyvXng=&amp;quot;,
+                &amp;quot;path&amp;quot;: &amp;quot;github.com/golang/protobuf/ptypes&amp;quot;,
+                &amp;quot;revision&amp;quot;: &amp;quot;c9c7427a2a70d2eb3bafa0ab2dc163e45f143317&amp;quot;,
+                &amp;quot;revisionTime&amp;quot;: &amp;quot;2017-03-07T00:15:33Z&amp;quot;
+            },
+            ...
+    ]
+    &amp;quot;rootPath&amp;quot;: &amp;quot;Bomber&amp;quot;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;将vendor加入版本控制&lt;/h3&gt;
+&lt;p&gt;什么！要把依赖加入版本控制中？！不会很臃肿吗？！&lt;/p&gt;
+&lt;p&gt;当然会臃肿……&lt;/p&gt;
+&lt;p&gt;如果你不把依赖源码加入版本控制中，
+你可以直接通过&lt;code&gt;go get ./..&lt;/code&gt;安装所需依赖，但是不能指定版本&lt;/p&gt;
+&lt;p&gt;或者只保留 &lt;code&gt;vendor.json&lt;/code&gt; 文件，然后用 &lt;code&gt;govendor sync&lt;/code&gt; 命令来下载对应版本的依赖。但是由于 go 的很多第三方包都来自 github ，可靠性和稳定性都会比较差。更可怕的是，由于 GFW 的存在，会导致一些官方包无法下载。所以，把依赖的源码加入版本控制，是个比较好的选择。&lt;/p&gt;</summary></entry><entry><title>tcp经受时延</title><link href="/tcpjing-shou-shi-yan.html" rel="alternate"></link><published>2017-05-20T16:15:00+00:00</published><updated>2017-05-20T16:15:00+00:00</updated><author><name>perrie</name></author><id>tag:,2017-05-20:tcpjing-shou-shi-yan.html</id><summary type="html">&lt;p&gt;学 &lt;code&gt;TCP/IP&lt;/code&gt; 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 &lt;code&gt;tcpdump&lt;/code&gt; ，就想着实战抓一下 &lt;code&gt;tcp&lt;/code&gt; 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个
+ &lt;code&gt;POST&lt;/code&gt; 请求，抓到如下信息：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.904647&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;2090421259&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;64240&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mss&lt;/span&gt; &lt;span class="mi"&gt;1460&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;wscale&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;sackOK&lt;/span&gt;&lt;span class="o"&gt;],&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.904699&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;2303886283&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;2090421260&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;29200&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mss&lt;/span&gt; &lt;span class="mi"&gt;1460&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;sackOK&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;wscale&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="o"&gt;],&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.905263&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.905596&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;230&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;229&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.905611&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;230&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;237&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.906212&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;230&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;786&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;556&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.906247&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;786&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;246&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.912497&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;336&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;786&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;246&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;335&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.913375&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;786&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;336&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2051&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.913807&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;336&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;787&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;246&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;03.914068&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;56558&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;337&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2051&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;三次握手协议很明显，但是说好的四次挥手协议只有三条！。&lt;/p&gt;
+&lt;p&gt;难道我们抓的是假的&lt;code&gt;TCP&lt;/code&gt;包？当然不是，在&lt;strong&gt;《TCP/IP详解》&lt;/strong&gt;卷一第十九章中，有这么一段话：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把从bsdi发送到srv4的7个ACK标记为经受时延的ACK。通常TCP在接收到数据时并不立即发送ACK；相反，它推迟发送，以便将ACK与需要沿该方向发送的数据一起发送（有时称这种现象为数据捎带ACK）。绝大多数实现采用的时延为200 ms，也就是说，TCP将以最大200 ms的时延等待是否有数据一起发送。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个行为叫做&lt;strong&gt;经受时延&lt;/strong&gt;(&lt;code&gt;Delay ACK&lt;/code&gt;)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;TCP delayed acknowledgment is a technique used by some implementations of the Transmission Control Protocol in an effort to improve network performance. In essence, several ACK responses may be combined together into a single response, reducing protocol overhead. However, in some circumstances, the technique can reduce application performance.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;由于 &lt;code&gt;HTTP&lt;/code&gt; 请求双发在发完消息后，双发几乎是同时关闭连接的，所以倒数第二条消息中，被动关闭方同时把 &lt;code&gt;FIN&lt;/code&gt; 和 &lt;code&gt;ACK&lt;/code&gt; 消息一同发送了，就变成了三次挥手。如果我们要看到四次挥手，只要让被动关闭方在主动关闭方发起 &lt;code&gt;FIN&lt;/code&gt; 消息&lt;strong&gt;&amp;gt;=200ms&lt;/strong&gt;之后再关闭连接，应该就可以看到四次挥手了。&lt;/p&gt;
+&lt;p&gt;所以写了段小代码测试。&lt;/p&gt;
+&lt;p&gt;服务端 &lt;code&gt;server.py&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;socket&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
+
+&lt;span class="n"&gt;HOST&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;PORT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;socket-server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3005&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AF_INET&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SOCK_STREAM&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bind&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;HOST&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;PORT&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;listen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;addr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;accept&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;recv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1024&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;break&lt;/span&gt;
+&lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;客户端 &lt;code&gt;client.py&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;socket&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
+
+&lt;span class="n"&gt;HOST&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;PORT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;socket-server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3005&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AF_INET&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SOCK_STREAM&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;connect&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;HOST&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;PORT&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sendall&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其中，客户端连接到服务器后，发送一条消息，并立即关闭连接。而服务端收到客户端的消息后，沉睡1秒后再关闭连接。&lt;/p&gt;
+&lt;p&gt;我再 &lt;code&gt;socket-server&lt;/code&gt; 机器上跑 &lt;code&gt;server.py&lt;/code&gt; 脚本，然后用 &lt;code&gt;tcpdump&lt;/code&gt; 抓取 &lt;code&gt;3005&lt;/code&gt; 端口的消息：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -ttt -i eno1 tcp and host socket-server and port 3005
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;-ttt&lt;/code&gt; 参数可以帮我们显示出两条消息之间的间隔。&lt;/p&gt;
+&lt;p&gt;然后再我自己的电脑上跑 &lt;code&gt;client.py&lt;/code&gt; 脚本。抓到如下数据：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000000&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;3277094545&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;64240&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mss&lt;/span&gt; &lt;span class="mi"&gt;1460&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;wscale&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;sackOK&lt;/span&gt;&lt;span class="o"&gt;],&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000048&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;450801491&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;3277094546&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;29200&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mss&lt;/span&gt; &lt;span class="mi"&gt;1460&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;sackOK&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nop&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;wscale&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="o"&gt;],&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000528&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000042&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000013&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;229&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000004&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.036681&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;229&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.964009&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;.],&lt;/span&gt; &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;229&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+ &lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;00.000541&lt;/span&gt; &lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;55683&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3005&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Flags&lt;/span&gt; &lt;span class="o"&gt;[.],&lt;/span&gt; &lt;span class="n"&gt;ack&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="mi"&gt;2053&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在上面，我们已经可以看到四次挥手了，实验成功（就是他妈有点水- -）！&lt;/p&gt;</summary></entry><entry><title>tcpdump的使用实例</title><link href="/tcpdumpde-shi-yong-shi-li.html" rel="alternate"></link><published>2017-05-20T13:46:00+00:00</published><updated>2017-05-20T13:46:00+00:00</updated><author><name>perrie</name></author><id>tag:,2017-05-20:tcpdumpde-shi-yong-shi-li.html</id><summary type="html">&lt;h2&gt;介绍&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;tcpdump&lt;/code&gt; 是 Linux 系统下进行网络分析的重要工具，我也因为对抓包这一块有些好奇，就找了些资料学习，然后整理成这篇文章。&lt;/p&gt;
+&lt;h2&gt;使用说明&lt;/h2&gt;
+&lt;p&gt;命令模式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ]     
+     [ -c count ]       
+     [ -C file_size ] [ -G rotate_seconds ] [ -F file ]         
+     [ -i interface ] [ -j tstamp_type ] [ -m module ] [ -M secret ]
+     [ --number ] [ -Q in|out|inout ] 
+     [ -r file ] [ -V file ] [ -s snaplen ] [ -T type ] [ -w file ] 
+     [ -W filecount ] 
+     [ -E spi@ipaddr algo:secret,... ] 
+     [ -y datalinktype ] [ -z postrotate-command ] [ -Z user ] 
+     [ --time-stamp-precision=tstamp_precision ] 
+     [ --immediate-mode ] [ --version ] 
+     [ expression ]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;参数说明&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;tcpdump&lt;/code&gt; 的可选参数很多，我这里只列举几个常用的，更详细的欢迎点击 &lt;strong&gt;&lt;a href="http://www.tcpdump.org/tcpdump_man.html"&gt;Manpage of TCPDUMP&lt;/a&gt;&lt;/strong&gt; 学习。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-i&lt;/code&gt;: 监听指定的网络接口，比如我的测试机器是：&lt;code&gt;-i eno1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-n&lt;/code&gt;: 不解析主机名，用纯 &lt;code&gt;ip&lt;/code&gt; 显示。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t&lt;/code&gt;: 每一行数据前面不显示时间戳。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt;: 指定抓取的条数，流量大的时候适用。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-w&lt;/code&gt;: 将结果输出到指定文件中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-r&lt;/code&gt;: 从指定文件中读取数据信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;条件语句&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;且&lt;/strong&gt;: 用 &lt;code&gt;and&lt;/code&gt; 或者 &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt; 表示；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;或&lt;/strong&gt;: 用 &lt;code&gt;or&lt;/code&gt; 或者 &lt;code&gt;||&lt;/code&gt; 表示；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;非&lt;/strong&gt;: 用 &lt;code&gt;not&lt;/code&gt; 或者 &lt;code&gt;!&lt;/code&gt; 表示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;多个条件语句连接示例（引号可加可不加）： &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -i eno1 &amp;#39;tcp and port 3000 or port 3001&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Example&lt;/h2&gt;
+&lt;h3&gt;指定主机或端口&lt;/h3&gt;
+&lt;p&gt;指定抓取的 &lt;code&gt;ip&lt;/code&gt; 地址&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -i eno1 host 192.168.1.2
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;指定源 &lt;code&gt;ip&lt;/code&gt; 和目的 &lt;code&gt;ip&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -i eno1 src 192.168.1.2
+sudo tcpdump -i eno1 dst 192.168.1.3
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;指定端口，以下两条协议是一样的作用&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -i eno1 port 21
+sudo tcpdump -i eno1 port ftp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;指定源端口和目的端口&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -i eno1 src port 3000 
+sudo tcpdump -i eno1 dst port 5000
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;同时指定协议、 &lt;code&gt;ip&lt;/code&gt; 和端口&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -i eno1 &amp;#39;tcp and host 192.168.1.2 and port 3000&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;抓取 HTTP 协议&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;待补充：这里我还不知道如何显示http协议发生的时间&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;抓取 &lt;code&gt;POST&lt;/code&gt; 请求：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tcpdump -n -A -i eno1 | grep -e &amp;#39;POST&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;得到输出为：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;. &amp;#39;.L..?......MP...E...POST /daily_quests/finish_quest HTTP/1.1
+. &amp;#39;.M...`./....P.......POST /getachievementaward HTTP/1.1
+. &amp;#39;.N....&amp;quot;..=;xP.......POST /buylottery/1.9.0 HTTP/1.1
+. &amp;#39;.O....8Q...AP...M...POST /daily_quests/finish_quest HTTP/1.1
+. &amp;#39;.P..&amp;quot;x+m&amp;amp;...P...y...POST /getDailyQuestAward HTTP/1.1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其它 &lt;code&gt;methods&lt;/code&gt; 类似， 不一一列举。&lt;/p&gt;
+&lt;h2&gt;参考资料&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.tcpdump.org/tcpdump_man.html"&gt;Manpage of TCPDUMP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://linuxwiki.github.io/NetTools/tcpdump.html"&gt;tcpdump - Linux Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.binarytides.com/tcpdump-tutorial-sniffing-analysing-packets/"&gt;Tcpdump tutorial – Sniffing and analysing packets from the commandline&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary></entry><entry><title>Replace Type Code With State/Strategy</title><link href="/replace-type-code-with-statestrategy.html" rel="alternate"></link><published>2016-12-28T12:40:00+00:00</published><updated>2016-12-28T12:40:00+00:00</updated><author><name></name></author><id>tag:,2016-12-26:replace-type-code-with-statestrategy.html</id><summary type="html">&lt;p&gt;今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个&lt;strong&gt;replace type code with state/strategy&lt;/strong&gt;的概念，不是很了解，
+但大概懂了意思。决定用&lt;code&gt;python&lt;/code&gt;实现一下其代码。&lt;/p&gt;
+&lt;p&gt;觉得主要思想是：&lt;/p&gt;
+&lt;p&gt;一个对象(&lt;code&gt;Movie&lt;/code&gt;)有一个属性(&lt;code&gt;price_code&lt;/code&gt;)，这个属性的不同会导致对象的方法(&lt;code&gt;get_charge&lt;/code&gt;)返回不同的结果。&lt;/p&gt;
+&lt;p&gt;最开始的想法肯定是用subclass进行分类，但是一部电影可以更换&lt;code&gt;price_code&lt;/code&gt;，一个对象没法更换其所属类，所以直接建立一个&lt;code&gt;price&lt;/code&gt;对象作为属性，改变&lt;code&gt;price_code&lt;/code&gt;时，即改变了&lt;code&gt;price&lt;/code&gt;对象。&lt;/p&gt;
+&lt;p&gt;重构前的代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Movie&lt;/span&gt;(&lt;span class="n"&gt;object&lt;/span&gt;):
+
+    &lt;span class="n"&gt;REGULAR&lt;/span&gt; = &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;NEW_RELEASE&lt;/span&gt; = &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="n"&gt;CHILDRENS&lt;/span&gt; = &lt;span class="mi"&gt;2&lt;/span&gt;
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;__init__&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;title&lt;/span&gt;, &lt;span class="n"&gt;price_code&lt;/span&gt;):
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;title&lt;/span&gt; = &lt;span class="n"&gt;title&lt;/span&gt;
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; = &lt;span class="n"&gt;price_code&lt;/span&gt;
+
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="n"&gt;result&lt;/span&gt; = &lt;span class="mi"&gt;0&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; == &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;REGULAR:&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; += &lt;span class="mi"&gt;2&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; &amp;gt; &lt;span class="mi"&gt;2&lt;/span&gt;:
+                &lt;span class="n"&gt;result&lt;/span&gt; += (&lt;span class="n"&gt;days_rented&lt;/span&gt; - &lt;span class="mi"&gt;2&lt;/span&gt;) * &lt;span class="mf"&gt;1.5&lt;/span&gt;
+        &lt;span class="n"&gt;elif&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; == &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;NEW_RELEASE:&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; += &lt;span class="n"&gt;days_rented&lt;/span&gt; * &lt;span class="mi"&gt;3&lt;/span&gt;
+        &lt;span class="n"&gt;elif&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; == &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;CHILDRENS:&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; += &lt;span class="mf"&gt;1.5&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; &amp;gt; &lt;span class="mi"&gt;3&lt;/span&gt;:
+                &lt;span class="n"&gt;result&lt;/span&gt; += (&lt;span class="n"&gt;days_rented&lt;/span&gt; - &lt;span class="mi"&gt;3&lt;/span&gt;) * &lt;span class="mf"&gt;1.5&lt;/span&gt;
+
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
+
+
+&lt;span class="n"&gt;movie&lt;/span&gt; = &lt;span class="n"&gt;Movie&lt;/span&gt;(&lt;span class="s"&gt;&amp;quot;Some Movie&amp;quot;&lt;/span&gt;, &lt;span class="mi"&gt;1&lt;/span&gt;)
+&lt;span class="nb"&gt;print&lt;/span&gt; &lt;span class="n"&gt;movie&lt;/span&gt;.&lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="mi"&gt;5&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;第一步：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Movie&lt;/span&gt;(&lt;span class="n"&gt;object&lt;/span&gt;):
+
+    &lt;span class="n"&gt;REGULAR&lt;/span&gt; = &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;NEW_RELEASE&lt;/span&gt; = &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="n"&gt;CHILDRENS&lt;/span&gt; = &lt;span class="mi"&gt;2&lt;/span&gt;
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;__init__&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;title&lt;/span&gt;, &lt;span class="n"&gt;price_code&lt;/span&gt;):
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;title&lt;/span&gt; = &lt;span class="n"&gt;title&lt;/span&gt;
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price&lt;/span&gt; = &lt;span class="n"&gt;Price&lt;/span&gt;(&lt;span class="n"&gt;price_code&lt;/span&gt;)
+
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price&lt;/span&gt;.&lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="n"&gt;days_rented&lt;/span&gt;)
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Price&lt;/span&gt;(&lt;span class="n"&gt;object&lt;/span&gt;):
+
+    &lt;span class="n"&gt;_price_code&lt;/span&gt; = &lt;span class="mi"&gt;0&lt;/span&gt;
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;__init__&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;price_code&lt;/span&gt;):
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; = &lt;span class="n"&gt;price_code&lt;/span&gt;
+
+    &lt;span class="nv"&gt;@property&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;price_code&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;):
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price_code&lt;/span&gt;
+
+    &lt;span class="nv"&gt;@price_code&lt;/span&gt;.&lt;span class="n"&gt;setter&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;price_code&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="nb"&gt;value&lt;/span&gt;):
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price_code&lt;/span&gt; = &lt;span class="nb"&gt;value&lt;/span&gt;
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="n"&gt;result&lt;/span&gt; = &lt;span class="mi"&gt;0&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; == &lt;span class="n"&gt;Movie&lt;/span&gt;.&lt;span class="n"&gt;REGULAR:&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; += &lt;span class="mi"&gt;2&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; &amp;gt; &lt;span class="mi"&gt;2&lt;/span&gt;:
+                &lt;span class="n"&gt;result&lt;/span&gt; += (&lt;span class="n"&gt;days_rented&lt;/span&gt; - &lt;span class="mi"&gt;2&lt;/span&gt;) * &lt;span class="mf"&gt;1.5&lt;/span&gt;
+        &lt;span class="n"&gt;elif&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; == &lt;span class="n"&gt;Movie&lt;/span&gt;.&lt;span class="n"&gt;NEW_RELEASE:&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; += &lt;span class="n"&gt;days_rented&lt;/span&gt; * &lt;span class="mi"&gt;3&lt;/span&gt;
+        &lt;span class="n"&gt;elif&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price_code&lt;/span&gt; == &lt;span class="n"&gt;Movie&lt;/span&gt;.&lt;span class="n"&gt;CHILDRENS:&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; += &lt;span class="mf"&gt;1.5&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; &amp;gt; &lt;span class="mi"&gt;3&lt;/span&gt;:
+                &lt;span class="n"&gt;result&lt;/span&gt; += (&lt;span class="n"&gt;days_rented&lt;/span&gt; - &lt;span class="mi"&gt;3&lt;/span&gt;) * &lt;span class="mf"&gt;1.5&lt;/span&gt;
+
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
+
+&lt;span class="n"&gt;movie&lt;/span&gt; = &lt;span class="n"&gt;Movie&lt;/span&gt;(&lt;span class="s"&gt;&amp;quot;Some Movie&amp;quot;&lt;/span&gt;, &lt;span class="mi"&gt;1&lt;/span&gt;)
+&lt;span class="nb"&gt;print&lt;/span&gt; &lt;span class="n"&gt;movie&lt;/span&gt;.&lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="mi"&gt;5&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;第二步：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Movie&lt;/span&gt;(&lt;span class="n"&gt;object&lt;/span&gt;):
+
+    &lt;span class="n"&gt;REGULAR&lt;/span&gt; = &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;NEW_RELEASE&lt;/span&gt; = &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="n"&gt;CHILDRENS&lt;/span&gt; = &lt;span class="mi"&gt;2&lt;/span&gt;
+
+    &lt;span class="n"&gt;_price&lt;/span&gt; = &lt;span class="n"&gt;None&lt;/span&gt;
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;__init__&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;title&lt;/span&gt;, &lt;span class="n"&gt;price_code&lt;/span&gt;):
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;title&lt;/span&gt; = &lt;span class="n"&gt;title&lt;/span&gt;
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;price&lt;/span&gt; = &lt;span class="n"&gt;price_code&lt;/span&gt;
+
+    &lt;span class="nv"&gt;@property&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;price&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;):
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price&lt;/span&gt;
+
+    &lt;span class="nv"&gt;@price&lt;/span&gt;.&lt;span class="n"&gt;setter&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;price&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="nb"&gt;value&lt;/span&gt;):
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;value&lt;/span&gt; == &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;REGULAR:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price&lt;/span&gt; = &lt;span class="n"&gt;RegularPrice&lt;/span&gt;()
+        &lt;span class="n"&gt;elif&lt;/span&gt; &lt;span class="nb"&gt;value&lt;/span&gt; == &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;NEW_RELEASE:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price&lt;/span&gt; = &lt;span class="n"&gt;NewReleasePrice&lt;/span&gt;()
+        &lt;span class="n"&gt;elif&lt;/span&gt; &lt;span class="nb"&gt;value&lt;/span&gt; == &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;CHILDRENS:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price&lt;/span&gt; = &lt;span class="n"&gt;ChildrenPrice&lt;/span&gt;()
+
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price&lt;/span&gt;.&lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="n"&gt;days_rented&lt;/span&gt;)
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Price&lt;/span&gt;(&lt;span class="n"&gt;object&lt;/span&gt;):
+
+    &lt;span class="nv"&gt;@property&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;price_code&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;):
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price_code&lt;/span&gt;
+
+    &lt;span class="nv"&gt;@price_code&lt;/span&gt;.&lt;span class="n"&gt;setter&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;price_code&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="nb"&gt;value&lt;/span&gt;):
+        &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;_price_code&lt;/span&gt; = &lt;span class="nb"&gt;value&lt;/span&gt;
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="nb"&gt;pass&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;RegularPrice&lt;/span&gt;(&lt;span class="n"&gt;Price&lt;/span&gt;):
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="n"&gt;result&lt;/span&gt; = &lt;span class="mi"&gt;2&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; &amp;gt; &lt;span class="mi"&gt;2&lt;/span&gt;:
+            &lt;span class="n"&gt;result&lt;/span&gt; += (&lt;span class="n"&gt;days_rented&lt;/span&gt; - &lt;span class="mi"&gt;2&lt;/span&gt;) * &lt;span class="mf"&gt;1.5&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;NewReleasePrice&lt;/span&gt;(&lt;span class="n"&gt;Price&lt;/span&gt;):
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; * &lt;span class="mi"&gt;3&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;ChildrenPrice&lt;/span&gt;(&lt;span class="n"&gt;Price&lt;/span&gt;):
+
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;days_rented&lt;/span&gt;):
+        &lt;span class="n"&gt;result&lt;/span&gt; = &lt;span class="mf"&gt;1.5&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;days_rented&lt;/span&gt; &amp;gt; &lt;span class="mi"&gt;3&lt;/span&gt;:
+            &lt;span class="n"&gt;result&lt;/span&gt; += (&lt;span class="n"&gt;days_rented&lt;/span&gt; - &lt;span class="mi"&gt;3&lt;/span&gt;) * &lt;span class="mf"&gt;1.5&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
+
+
+&lt;span class="n"&gt;movie&lt;/span&gt; = &lt;span class="n"&gt;Movie&lt;/span&gt;(&lt;span class="s"&gt;&amp;quot;Some Movie&amp;quot;&lt;/span&gt;, &lt;span class="mi"&gt;1&lt;/span&gt;)
+&lt;span class="nb"&gt;print&lt;/span&gt; &lt;span class="n"&gt;movie&lt;/span&gt;.&lt;span class="n"&gt;get_charge&lt;/span&gt;(&lt;span class="mi"&gt;5&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;</summary></entry></feed>
