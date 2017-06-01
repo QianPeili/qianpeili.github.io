@@ -4,10 +4,10 @@
 <head>
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
 
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
+    <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/stylesheet/style.min.css">
 
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/github.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
 
 
 
@@ -21,17 +21,17 @@
 
 
 <meta name="author" content="perrie" />
-<meta name="description" content="学 TCP/IP 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 tcpdump ，就想着实战抓一下 tcp 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个 POST 请求，抓到如下信息： 15:05:03.904647 IP socket-client.56558 > socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0 15:05:03.904699 IP socket-server.3000 > socket ..." />
+<meta name="description" content="学 TCP/IP 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 tcpdump ，就想着实战抓一下 tcp 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个 POST 请求，抓到如下信息： 15:05:03.904647 IP socket-client.56558 > socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0 15:05:03.904699 IP socket-server.3000 > socket-client.56558: Flags [S …" />
 <meta name="keywords" content="">
 <meta property="og:site_name" content="Perrie's Home"/>
 <meta property="og:title" content="tcp经受时延"/>
-<meta property="og:description" content="学 TCP/IP 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 tcpdump ，就想着实战抓一下 tcp 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个 POST 请求，抓到如下信息： 15:05:03.904647 IP socket-client.56558 > socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0 15:05:03.904699 IP socket-server.3000 > socket ..."/>
+<meta property="og:description" content="学 TCP/IP 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 tcpdump ，就想着实战抓一下 tcp 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个 POST 请求，抓到如下信息： 15:05:03.904647 IP socket-client.56558 > socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0 15:05:03.904699 IP socket-server.3000 > socket-client.56558: Flags [S …"/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="/tcpjing-shou-shi-yan.html"/>
+<meta property="og:url" content="http://qianpeili.github.io/tcpjing-shou-shi-yan.html"/>
 <meta property="og:type" content="article"/>
 <meta property="article:published_time" content="2017-05-20 16:15:00+08:00"/>
 <meta property="article:modified_time" content=""/>
-<meta property="article:author" content="/author/perrie.html">
+<meta property="article:author" content="http://qianpeili.github.io/author/perrie.html">
 <meta property="article:section" content="note"/>
 <meta property="og:image" content="/images/profile.png">
 
@@ -41,16 +41,15 @@
 <body>
   <aside>
     <div>
-      <a href="">
+      <a href="http://qianpeili.github.io">
         <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
       </a>
-      <h1><a href="">爪了个子(QianPeili)</a></h1>
+      <h1><a href="http://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
 
 <p>我所见，我所想</p>
       <nav>
         <ul class="list">
 
-          <li><a href="/index.html" target="_blank">Home</a></li>
           <li><a href="https://github.com/QianPeili" target="_blank">About</a></li>
           <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
         </ul>
@@ -67,7 +66,7 @@
   <main>
 
     <nav>
-      <a href="">    Home
+      <a href="http://qianpeili.github.io">    Home
 </a>
 
       <a href="/archives.html">Archives</a>
@@ -81,7 +80,7 @@
   <header>
     <h1 id="tcpjing-shou-shi-yan">tcp经受时延</h1>
     <p>
-          Posted on 周六 20 五月 2017 in <a href="/category/note.html">note</a>
+          Posted on 周六 20 五月 2017 in <a href="http://qianpeili.github.io/category/note.html">note</a>
 
 
     </p>
@@ -91,17 +90,17 @@
   <div>
     <p>学 <code>TCP/IP</code> 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 <code>tcpdump</code> ，就想着实战抓一下 <code>tcp</code> 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个
  <code>POST</code> 请求，抓到如下信息：</p>
-<div class="highlight"><pre><span></span><span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904647</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">],</span> <span class="n">seq</span> <span class="mi">2090421259</span><span class="o">,</span> <span class="n">win</span> <span class="mi">64240</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">8</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904699</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">2303886283</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">2090421260</span><span class="o">,</span> <span class="n">win</span> <span class="mi">29200</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">7</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.905263</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">1</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.905596</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">P</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">1</span><span class="o">:</span><span class="mi">230</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">1</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">229</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.905611</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">230</span><span class="o">,</span> <span class="n">win</span> <span class="mi">237</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.906212</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">P</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">230</span><span class="o">:</span><span class="mi">786</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">1</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">556</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.906247</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">786</span><span class="o">,</span> <span class="n">win</span> <span class="mi">246</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.912497</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">P</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">1</span><span class="o">:</span><span class="mi">336</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">786</span><span class="o">,</span> <span class="n">win</span> <span class="mi">246</span><span class="o">,</span> <span class="n">length</span> <span class="mi">335</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.913375</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">F</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">786</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">336</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2051</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.913807</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">F</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">336</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">787</span><span class="o">,</span> <span class="n">win</span> <span class="mi">246</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.914068</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">337</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2051</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
+<div class="highlight"><pre><span></span>15:05:03.904647 IP socket-client.56558 &gt; socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0
+15:05:03.904699 IP socket-server.3000 &gt; socket-client.56558: Flags [S.], seq 2303886283, ack 2090421260, win 29200, options [mss 1460,nop,nop,sackOK,nop,wscale 7], length 0
+15:05:03.905263 IP socket-client.56558 &gt; socket-server.3000: Flags [.], ack 1, win 2053, length 0
+15:05:03.905596 IP socket-client.56558 &gt; socket-server.3000: Flags [P.], seq 1:230, ack 1, win 2053, length 229
+15:05:03.905611 IP socket-server.3000 &gt; socket-client.56558: Flags [.], ack 230, win 237, length 0
+15:05:03.906212 IP socket-client.56558 &gt; socket-server.3000: Flags [P.], seq 230:786, ack 1, win 2053, length 556
+15:05:03.906247 IP socket-server.3000 &gt; socket-client.56558: Flags [.], ack 786, win 246, length 0
+15:05:03.912497 IP socket-server.3000 &gt; socket-client.56558: Flags [P.], seq 1:336, ack 786, win 246, length 335
+15:05:03.913375 IP socket-client.56558 &gt; socket-server.3000: Flags [F.], seq 786, ack 336, win 2051, length 0
+15:05:03.913807 IP socket-server.3000 &gt; socket-client.56558: Flags [F.], seq 336, ack 787, win 246, length 0
+15:05:03.914068 IP socket-client.56558 &gt; socket-server.3000: Flags [.], ack 337, win 2051, length 0
 </pre></div>
 
 
@@ -154,15 +153,15 @@
 
 <p><code>-ttt</code> 参数可以帮我们显示出两条消息之间的间隔。</p>
 <p>然后再我自己的电脑上跑 <code>client.py</code> 脚本。抓到如下数据：</p>
-<div class="highlight"><pre><span></span><span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000000</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">],</span> <span class="n">seq</span> <span class="mi">3277094545</span><span class="o">,</span> <span class="n">win</span> <span class="mi">64240</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">8</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000048</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">450801491</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">3277094546</span><span class="o">,</span> <span class="n">win</span> <span class="mi">29200</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">7</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000528</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">1</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000042</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">P</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">1</span><span class="o">:</span><span class="mi">6</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">1</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">5</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000013</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">6</span><span class="o">,</span> <span class="n">win</span> <span class="mi">229</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000004</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">F</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">6</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">1</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.036681</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">7</span><span class="o">,</span> <span class="n">win</span> <span class="mi">229</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.964009</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">F</span><span class="o">.],</span> <span class="n">seq</span> <span class="mi">1</span><span class="o">,</span> <span class="n">ack</span> <span class="mi">7</span><span class="o">,</span> <span class="n">win</span> <span class="mi">229</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
- <span class="mi">00</span><span class="o">:</span><span class="mi">00</span><span class="o">:</span><span class="mf">00.000541</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">55683</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3005</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[.],</span> <span class="n">ack</span> <span class="mi">2</span><span class="o">,</span> <span class="n">win</span> <span class="mi">2053</span><span class="o">,</span> <span class="n">length</span> <span class="mi">0</span>
+<div class="highlight"><pre><span></span>00:00:00.000000 IP socket-client.55683 &gt; socket-server.3005: Flags [S], seq 3277094545, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0
+ 00:00:00.000048 IP socket-server.3005 &gt; socket-client.55683: Flags [S.], seq 450801491, ack 3277094546, win 29200, options [mss 1460,nop,nop,sackOK,nop,wscale 7], length 0
+ 00:00:00.000528 IP socket-client.55683 &gt; socket-server.3005: Flags [.], ack 1, win 2053, length 0
+ 00:00:00.000042 IP socket-client.55683 &gt; socket-server.3005: Flags [P.], seq 1:6, ack 1, win 2053, length 5
+ 00:00:00.000013 IP socket-server.3005 &gt; socket-client.55683: Flags [.], ack 6, win 229, length 0
+ 00:00:00.000004 IP socket-client.55683 &gt; socket-server.3005: Flags [F.], seq 6, ack 1, win 2053, length 0
+ 00:00:00.036681 IP socket-server.3005 &gt; socket-client.55683: Flags [.], ack 7, win 229, length 0
+ 00:00:00.964009 IP socket-server.3005 &gt; socket-client.55683: Flags [F.], seq 1, ack 7, win 229, length 0
+ 00:00:00.000541 IP socket-client.55683 &gt; socket-server.3005: Flags [.], ack 2, win 2053, length 0
 </pre></div>
 
 
@@ -193,7 +192,7 @@
   "@context" : "http://schema.org",
   "@type" : "Blog",
   "name": " Perrie's Home ",
-  "url" : "",
+  "url" : "http://qianpeili.github.io",
   "image": "/images/profile.png",
   "description": ""
 }

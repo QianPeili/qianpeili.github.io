@@ -4,10 +4,10 @@
 <head>
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
 
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
+    <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/stylesheet/style.min.css">
 
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/github.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
 
 
 
@@ -27,7 +27,7 @@
 <meta property="og:title" content="Perrie's Home"/>
 <meta property="og:description" content=""/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content=""/>
+<meta property="og:url" content="http://qianpeili.github.io"/>
 <meta property="og:image" content="/images/profile.png">
 
   <title>Perrie's Home &ndash;     Category Tips
@@ -37,16 +37,15 @@
 <body>
   <aside>
     <div>
-      <a href="">
+      <a href="http://qianpeili.github.io">
         <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
       </a>
-      <h1><a href="">爪了个子(QianPeili)</a></h1>
+      <h1><a href="http://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
 
 <p>我所见，我所想</p>
       <nav>
         <ul class="list">
 
-          <li><a href="/index.html" target="_blank">Home</a></li>
           <li><a href="https://github.com/QianPeili" target="_blank">About</a></li>
           <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
         </ul>
@@ -63,7 +62,7 @@
   <main>
 
     <nav>
-      <a href="">    Home
+      <a href="http://qianpeili.github.io">    Home
 </a>
 
       <a href="/archives.html">Archives</a>
@@ -77,9 +76,9 @@
 
 <article>
   <header>
-    <h2><a href="/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
+    <h2><a href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
     <p>
-          Posted on 周五 07 四月 2017 in <a href="/category/tips.html">Tips</a>
+          Posted on 周五 07 四月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>
 
 
 
@@ -110,16 +109,16 @@
 <p>就会输出原先代表的文字意思了</p>
 <p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>
       <br>
-      <a class="btn" href="/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">    Continue reading
+      <a class="btn" href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">    Continue reading
 </a>
   </div>
   <hr />
 </article>
 <article>
   <header>
-    <h2><a href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">用mongodb统计去重后的数量</a></h2>
+    <h2><a href="http://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">用mongodb统计去重后的数量</a></h2>
     <p>
-          Posted on 周四 16 三月 2017 in <a href="/category/tips.html">tips</a>
+          Posted on 周四 16 三月 2017 in <a href="http://qianpeili.github.io/category/tips.html">tips</a>
 
 
 
@@ -136,17 +135,17 @@
 
 
 <p>要求统计参与活动的玩家中，分数大于等于10的人数。</p>
-<div class="highlight"><pre><span></span><span class="x">var num = db.activity_log.aggregate([</span>
-<span class="x">    </span><span class="cp">{</span><span class="nv">$match</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;score&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;$ge&quot;</span><span class="o">:</span> <span class="m">10</span><span class="cp">}}}</span><span class="x">,  # 筛选</span>
-<span class="x">    </span><span class="cp">{</span><span class="nv">$group</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;users&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="nv">$addToSet</span><span class="o">:</span> <span class="s2">&quot;$uid&quot;</span><span class="cp">}}}</span><span class="x">,    # 将玩家ID放入一个集合，作去重</span>
-<span class="x">    </span><span class="cp">{</span><span class="s2">&quot;$project&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;$size&quot;</span><span class="o">:</span> <span class="s2">&quot;$users&quot;</span><span class="cp">}}}</span><span class="x">    # 求集合大小</span>
-<span class="x">]);</span>
+<div class="highlight"><pre><span></span>var num = db.activity_log.aggregate([
+    {$match: {&quot;score&quot;: {&quot;$ge&quot;: 10}}},  # 筛选
+    {$group: {&quot;_id&quot;: null, &quot;users&quot;: {$addToSet: &quot;$uid&quot;}}},    # 将玩家ID放入一个集合，作去重
+    {&quot;$project&quot;: {&quot;_id&quot;: {&quot;$size&quot;: &quot;$users&quot;}}}    # 求集合大小
+]);
 </pre></div>
 
 
 <p>得出结果<code>{"_id": 46}</code></p>
       <br>
-      <a class="btn" href="/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">    Continue reading
+      <a class="btn" href="http://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">    Continue reading
 </a>
   </div>
 </article>
@@ -172,7 +171,7 @@
   "@context" : "http://schema.org",
   "@type" : "Blog",
   "name": " Perrie's Home ",
-  "url" : "",
+  "url" : "http://qianpeili.github.io",
   "image": "/images/profile.png",
   "description": ""
 }
