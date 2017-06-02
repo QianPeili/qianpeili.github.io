@@ -20,10 +20,10 @@
   <meta name="robots" content="" />
 
 
-<meta name="author" content="Perrie" />
+<meta name="author" content="QianPeili" />
 <meta name="description" content="假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下 { _id: ObjectId(), uid: 1014, score: 10 } 要求统计参与活动的玩家中，分数大于等于10的人数。 var num = db.activity_log.aggregate([ {$match: {"score": {"$ge": 10}}}, # 筛选 {$group: {"_id": null, "users": {$addToSet: "$uid"}}}, # 将玩家ID放入一个集合，作去重 {"$project": {"_id": {"$size": "$users"}}} # 求集合大小 ]); 得出结果{"_id": 46}" />
 <meta name="keywords" content="">
-<meta property="og:site_name" content="Perrie's Home"/>
+<meta property="og:site_name" content="爪了个子"/>
 <meta property="og:title" content="用mongodb统计去重后的数量"/>
 <meta property="og:description" content="假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下 { _id: ObjectId(), uid: 1014, score: 10 } 要求统计参与活动的玩家中，分数大于等于10的人数。 var num = db.activity_log.aggregate([ {$match: {"score": {"$ge": 10}}}, # 筛选 {$group: {"_id": null, "users": {$addToSet: "$uid"}}}, # 将玩家ID放入一个集合，作去重 {"$project": {"_id": {"$size": "$users"}}} # 求集合大小 ]); 得出结果{"_id": 46}"/>
 <meta property="og:locale" content="en_US"/>
@@ -31,11 +31,11 @@
 <meta property="og:type" content="article"/>
 <meta property="article:published_time" content="2017-03-16 18:11:00+08:00"/>
 <meta property="article:modified_time" content=""/>
-<meta property="article:author" content="http://qianpeili.github.io/author/perrie.html">
+<meta property="article:author" content="http://qianpeili.github.io/author/qianpeili.html">
 <meta property="article:section" content="tips"/>
 <meta property="og:image" content="/images/profile.png">
 
-  <title>Perrie's Home &ndash; 用mongodb统计去重后的数量</title>
+  <title>爪了个子 &ndash; 用mongodb统计去重后的数量</title>
 
 </head>
 <body>
@@ -98,11 +98,11 @@
 
 
 <p>要求统计参与活动的玩家中，分数大于等于10的人数。</p>
-<div class="highlight"><pre><span></span>var num = db.activity_log.aggregate([
-    {$match: {&quot;score&quot;: {&quot;$ge&quot;: 10}}},  # 筛选
-    {$group: {&quot;_id&quot;: null, &quot;users&quot;: {$addToSet: &quot;$uid&quot;}}},    # 将玩家ID放入一个集合，作去重
-    {&quot;$project&quot;: {&quot;_id&quot;: {&quot;$size&quot;: &quot;$users&quot;}}}    # 求集合大小
-]);
+<div class="highlight"><pre><span></span><span class="x">var num = db.activity_log.aggregate([</span>
+<span class="x">    </span><span class="cp">{</span><span class="nv">$match</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;score&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;$ge&quot;</span><span class="o">:</span> <span class="m">10</span><span class="cp">}}}</span><span class="x">,  # 筛选</span>
+<span class="x">    </span><span class="cp">{</span><span class="nv">$group</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;users&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="nv">$addToSet</span><span class="o">:</span> <span class="s2">&quot;$uid&quot;</span><span class="cp">}}}</span><span class="x">,    # 将玩家ID放入一个集合，作去重</span>
+<span class="x">    </span><span class="cp">{</span><span class="s2">&quot;$project&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span> <span class="cp">{</span><span class="s2">&quot;$size&quot;</span><span class="o">:</span> <span class="s2">&quot;$users&quot;</span><span class="cp">}}}</span><span class="x">    # 求集合大小</span>
+<span class="x">]);</span>
 </pre></div>
 
 
@@ -119,7 +119,7 @@
 </article>
 
     <footer>
-<p>&copy; Perrie </p>
+<p>&copy; QianPeili </p>
 <p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
 </p>    </footer>
   </main>
@@ -132,7 +132,7 @@
 {
   "@context" : "http://schema.org",
   "@type" : "Blog",
-  "name": " Perrie's Home ",
+  "name": " 爪了个子 ",
   "url" : "http://qianpeili.github.io",
   "image": "/images/profile.png",
   "description": ""
