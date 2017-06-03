@@ -1,32 +1,91 @@
+
 <!DOCTYPE html>
 <html lang="cn">
 <head>
-        <title>爪了个子 - Articles by QianPeili</title>
-        <meta charset="utf-8" />
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+
+    <meta name="author" content="QianPeili" />
+    <meta name="description" content="" />
+<meta property="og:site_name" content="爪了个子"/>
+<meta property="og:type" content="blog"/>
+<meta property="og:title" content="爪了个子"/>
+<meta property="og:description" content=""/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://qianpeili.github.io"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>爪了个子 &ndash;     Posts by QianPeili
+:</title>
+
 </head>
+<body>
+  <aside>
+    <div>
+      <a href="http://qianpeili.github.io">
+        <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
+      </a>
+      <h1><a href="http://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="http://qianpeili.github.io/">爪了个子 <strong>我所见，我所想</strong></a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-            <li><a href="/archives.html">Archives</a></li>
-            <li><a href="/categories.html">Categories</a></li>
-            <li><a href="/tags.html">Tags</a></li>
-        </ul></nav><!-- /#menu -->
-<section id="content">
-<h2>Articles by QianPeili</h2>
+<p>我所见，我所想</p>
+      <nav>
+        <ul class="list">
 
-<ol id="post-list">
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="http://qianpeili.github.io/gode-yi-lai-guan-li-gong-ju-govendor.html" rel="bookmark" title="Permalink to Go的依赖管理工具govendor">Go的依赖管理工具govendor</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2017-05-22T18:11:00+08:00"> 周一 22 五月 2017 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="http://qianpeili.github.io/author/qianpeili.html">QianPeili</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>依赖管理是我接触 go 以来，觉得比较麻烦的事情。
+          <li><a href="https://github.com/QianPeili" target="_blank">About</a></li>
+          <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/QianPeili" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-qq" href="394511725" target="_blank"><i class="fa fa-qq"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="http://qianpeili.github.io">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="http://qianpeili.github.io/gode-yi-lai-guan-li-gong-ju-govendor.html#gode-yi-lai-guan-li-gong-ju-govendor">Go的依赖管理工具govendor</a></h2>
+    <p>
+          Posted on 周一 22 五月 2017 in <a href="http://qianpeili.github.io/category/note.html">note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>依赖管理是我接触 go 以来，觉得比较麻烦的事情。
 不过在 go-1.5 版本中，出现了一个 <code>vendor</code> 的概念，并且 <code>vendor</code> 作为一个默认功能存在于1.7之后的版本中。</p>
 <p>vendor的概念就类似于python中的 <code>virtualenv</code> 建立的 <code>env</code>，它是一个文件夹，里面存放了项目所用的依赖。如果项目中有个文件 import 了第三方的 package，而这个 package 又存在项目的 vendor 目录中，这个文件编译的时候会从 vendor 中 import 这个 package</p>
 <p>比如：</p>
@@ -36,17 +95,25 @@
 |   |   |   main.go
 |   |   |   vendor/
 |   |   |   |   github.com/pkg/sftp/
-|   |   |   |   golang.org/x …</pre></div> </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="http://qianpeili.github.io/unicodexiao-ji-qiao.html" rel="bookmark" title="Permalink to unicode小技巧">unicode小技巧</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2017-04-07T10:20:00+08:00"> 周五 07 四月 2017 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="http://qianpeili.github.io/author/qianpeili.html">QianPeili</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>今天遇到一个问题</p>
+|   |   |   |   golang.org/x …</pre></div>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/gode-yi-lai-guan-li-gong-ju-govendor.html#gode-yi-lai-guan-li-gong-ju-govendor">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
+    <p>
+          Posted on 周五 07 四月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>今天遇到一个问题</p>
 <p>在mysql查询日志时，发现一些unicode字符串存储变成了</p>
 <div class="highlight"><pre><span></span>u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
 </pre></div>
@@ -68,17 +135,25 @@
 
 
 <p>就会输出原先代表的文字意思了</p>
-<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p> </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="http://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html" rel="bookmark" title="Permalink to 用mongodb统计去重后的数量">用mongodb统计去重后的数量</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2017-03-16T18:11:00+08:00"> 周四 16 三月 2017 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="http://qianpeili.github.io/author/qianpeili.html">QianPeili</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
+<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="http://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">用mongodb统计去重后的数量</a></h2>
+    <p>
+          Posted on 周四 16 三月 2017 in <a href="http://qianpeili.github.io/category/tips.html">tips</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>假设有一个活动记录表，记录了玩家的参与信息，每个玩家有多条记录，格式如下</p>
 <div class="highlight"><pre><span></span>{
     _id: ObjectId(),
     uid: 1014,
@@ -96,17 +171,25 @@
 </pre></div>
 
 
-<p>得出结果<code>{"_id": 46}</code></p> </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html" rel="bookmark" title="Permalink to Replace Type Code With State/Strategy">Replace Type Code With State/Strategy</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2016-12-26T20:55:00+08:00"> 周一 26 十二月 2016 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="http://qianpeili.github.io/author/qianpeili.html">QianPeili</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
+<p>得出结果<code>{"_id": 46}</code></p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">Replace Type Code With State/Strategy</a></h2>
+    <p>
+          Posted on 周一 26 十二月 2016 in <a href="http://qianpeili.github.io/category/note.html">note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
 但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
 <p>觉得主要思想是：</p>
 <p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
@@ -118,26 +201,68 @@
     <span class="nx">NEW_RELEASE</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="nx">CHILDRENS</span> <span class="o">=</span> <span class="mi">2</span>
 
-    <span class="nx">def</span> <span class="nx">__init__ …</span></pre></div> </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="http://qianpeili.github.io/my-first-review.html" rel="bookmark" title="Permalink to My First Review">My First Review</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2016-12-05T16:20:00+08:00"> 周一 05 十二月 2016 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="http://qianpeili.github.io/author/qianpeili.html">QianPeili</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>好吧，打扫一下，准备吧github page重新用起来</p>
-<p>这次没用hexo，用了pelican啦~</p> </div><!-- /.entry-content -->
-        </article></li>
-</ol><!-- /#posts-list -->
-</section><!-- /#content -->
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+    <span class="nx">def</span> <span class="nx">__init__ …</span></pre></div>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="http://qianpeili.github.io/my-first-review.html#my-first-review">My First Review</a></h2>
+    <p>
+          Posted on 周一 05 十二月 2016 in <a href="http://qianpeili.github.io/category/review.html">Review</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>好吧，打扫一下，准备吧github page重新用起来</p>
+<p>这次没用hexo，用了pelican啦~</p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/my-first-review.html#my-first-review">    Continue reading
+</a>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+
+    <footer>
+<p>&copy;  </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-100449520-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " 爪了个子 ",
+  "url" : "http://qianpeili.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
 </body>
 </html>

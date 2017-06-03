@@ -1,38 +1,95 @@
+
 <!DOCTYPE html>
 <html lang="cn">
 <head>
-          <title>爪了个子</title>
-        <meta charset="utf-8" />
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
 
 
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+
+<meta name="author" content="perrie" />
+<meta name="description" content="学 TCP/IP 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 tcpdump ，就想着实战抓一下 tcp 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个 POST 请求，抓到如下信息： 15:05:03.904647 IP socket-client.56558 &gt; socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0 15:05:03.904699 IP socket-server.3000 &gt; socket …" />
+<meta name="keywords" content="">
+
+<meta property="og:site_name" content="爪了个子"/>
+<meta property="og:title" content="tcp经受时延"/>
+<meta property="og:description" content="学 TCP/IP 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 tcpdump ，就想着实战抓一下 tcp 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个 POST 请求，抓到如下信息： 15:05:03.904647 IP socket-client.56558 &gt; socket-server.3000: Flags [S], seq 2090421259, win 64240, options [mss 1460,nop,wscale 8,nop,nop,sackOK], length 0 15:05:03.904699 IP socket-server.3000 &gt; socket …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://qianpeili.github.io/tcpjing-shou-shi-yan.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-05-20 16:15:00+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://qianpeili.github.io/author/perrie.html">
+<meta property="article:section" content="note"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>爪了个子 &ndash; tcp经受时延</title>
 
 </head>
+<body>
+  <aside>
+    <div>
+      <a href="http://qianpeili.github.io">
+        <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
+      </a>
+      <h1><a href="http://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="http://qianpeili.github.io/">爪了个子 <strong>我所见，我所想</strong></a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-            <li><a href="/archives.html">Archives</a></li>
-            <li><a href="/categories.html">Categories</a></li>
-            <li><a href="/tags.html">Tags</a></li>
-        </ul></nav><!-- /#menu -->
-<section id="content" class="body">
+<p>我所见，我所想</p>
+      <nav>
+        <ul class="list">
+
+          <li><a href="https://github.com/QianPeili" target="_blank">About</a></li>
+          <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/QianPeili" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-qq" href="394511725" target="_blank"><i class="fa fa-qq"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="http://qianpeili.github.io">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
   <header>
-    <h2 class="entry-title">
-      <a href="http://qianpeili.github.io/tcpjing-shou-shi-yan.html" rel="bookmark"
-         title="Permalink to tcp经受时延">tcp经受时延</a></h2>
- 
+      
+    <h1 id="tcpjing-shou-shi-yan">tcp经受时延</h1>
+    <p>
+          Posted on 周六 20 五月 2017 in <a href="http://qianpeili.github.io/category/note.html">note</a>
+
+
+    </p>
   </header>
-  <footer class="post-info">
-    <time class="published" datetime="2017-05-20T16:15:00+08:00">
-      周六 20 五月 2017
-    </time>
-    <address class="vcard author">
-      By           <a class="url fn" href="http://qianpeili.github.io/author/perrie.html">perrie</a>
-    </address>
-  </footer><!-- /.post-info -->
-  <div class="entry-content">
+
+
+  <div>
     <p>学 <code>TCP/IP</code> 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 <code>tcpdump</code> ，就想着实战抓一下 <code>tcp</code> 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个
  <code>POST</code> 请求，抓到如下信息：</p>
 <div class="highlight"><pre><span></span><span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904647</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">],</span> <span class="n">seq</span> <span class="mi">2090421259</span><span class="o">,</span> <span class="n">win</span> <span class="mi">64240</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">8</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
@@ -111,13 +168,49 @@
 
 
 <p>在上面，我们已经可以看到四次挥手了，实验成功（就是他妈有点水- -）！</p>
-  </div><!-- /.entry-content -->
-</section>
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+  </div>
+  <div class="tag-cloud">
+    <p>
+    </p>
+  </div>
+
+
+
+    <div class="addthis_relatedposts_inline">
+
+
+</article>
+
+    <footer>
+<p>&copy;  </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-100449520-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " 爪了个子 ",
+  "url" : "http://qianpeili.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
 </body>
 </html>
