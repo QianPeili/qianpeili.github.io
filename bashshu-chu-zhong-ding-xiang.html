@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+
+<meta name="author" content="QianPeili" />
+<meta name="description" content="Tags： bash,linux 对 bash 命令一直不太熟，每次使用 nohup 命令都要从网上现找。 有时会看到一些命令后面跟着 &#34;2&gt;&amp;1&#34; 的参数。比如 nohupy python test.py &gt; test.log 2&gt;&amp;1 之前也没有多管，直接用了。前几天又在其他人的 shell 脚本中看到 &#34;2&gt;&amp;1&#34;, 才想起去了解一下 ，现把内容整理一下做记录。 主要内容借鉴于Bash One-Liners Explained, Part III: All about redirections - good coders code, great coders reuse，原文非常详细，欢迎访问原文。 当 bash …" />
+<meta name="keywords" content="">
+
+<meta property="og:site_name" content="爪了个子"/>
+<meta property="og:title" content="Bash输出重定向"/>
+<meta property="og:description" content="Tags： bash,linux 对 bash 命令一直不太熟，每次使用 nohup 命令都要从网上现找。 有时会看到一些命令后面跟着 &#34;2&gt;&amp;1&#34; 的参数。比如 nohupy python test.py &gt; test.log 2&gt;&amp;1 之前也没有多管，直接用了。前几天又在其他人的 shell 脚本中看到 &#34;2&gt;&amp;1&#34;, 才想起去了解一下 ，现把内容整理一下做记录。 主要内容借鉴于Bash One-Liners Explained, Part III: All about redirections - good coders code, great coders reuse，原文非常详细，欢迎访问原文。 当 bash …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://qianpeili.github.io/bashshu-chu-zhong-ding-xiang.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-07-09 15:20:00+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://qianpeili.github.io/author/qianpeili.html">
+<meta property="article:section" content="note"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>爪了个子 &ndash; Bash输出重定向</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="http://qianpeili.github.io">
+        <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
+      </a>
+      <h1><a href="http://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
+
+<p>我所见，我所想</p>
+      <nav>
+        <ul class="list">
+
+          <li><a href="/about-me.html" target="_blank">About</a></li>
+          <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/QianPeili" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-qq" href="394511725" target="_blank"><i class="fa fa-qq"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="http://qianpeili.github.io">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/authors.html">Authors</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="bashshu-chu-zhong-ding-xiang">Bash输出重定向</h1>
+    <p>
+          Posted on 周日 09 七月 2017 in <a href="http://qianpeili.github.io/category/note.html">note</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>Tags： bash,linux</p>
+<p>对 bash 命令一直不太熟，每次使用 nohup 命令都要从网上现找。
+有时会看到一些命令后面跟着 <code>"2&gt;&amp;1"</code> 的参数。比如</p>
+<div class="highlight"><pre><span></span>nohupy python test.py &gt; test.log 2&gt;&amp;1
+</pre></div>
+
+
+<p>之前也没有多管，直接用了。前几天又在其他人的 shell 脚本中看到 <code>"2&gt;&amp;1"</code>, 才想起去了解一下 ，现把内容整理一下做记录。</p>
+<p>主要内容借鉴于<a href="http://www.catonmat.net/blog/bash-one-liners-explained-part-three/">Bash One-Liners Explained, Part III: All about redirections - good coders code, great coders reuse</a>，原文非常详细，欢迎访问原文。</p>
+<p>当 bash 启动时，会开启三个标准文件描述符：stdin, stdout, stderr。</p>
+<p><img alt="" src="images/r-1.png"></p>
+<p>它们都指向了 <code>/dev/tty0</code> 即我们当前使用的控制台。 <code>0</code> 代表 stdin， <code>1</code> 代表 stdout, <code>2</code> 代表stderr。</p>
+<p>当我们输入一个命令：</p>
+<div class="highlight"><pre><span></span>python test.py &gt; file
+</pre></div>
+
+
+<p><code>&gt;</code> 就是输出重定向运算符，bash 首先会以写的形式打开 <code>file</code>，成功后上述命令的 stdout 就会被发送到这个打开的 <code>file</code> 中。如果打开失败，则整个命令失败。</p>
+<p><code>python test.py &gt; file</code> 命令等同于 <code>python test.py 1&gt;file</code>，因为 <code>1</code> 就代表标准输出 <code>stdout</code>。这个时候的文件描述符指向如下：</p>
+<p><img alt="" src="images/r-2.png"></p>
+<p>那么 <code>2&gt;&amp;1</code> 代表什么呢，它代表的是，将 <code>2</code> 所在文件描述符指向 <code>1</code> 所指向的内容。 如果 <code>1</code> 此时指向的是 <code>file</code>， 那么 <code>2</code> 也指向同一个 <code>file</code>。如下图所示：</p>
+<p><img alt="" src="images/r-3.png"></p>
+<p>另外命令<code>python test.py &amp;&gt; file</code>可以实现与 <code>2&gt;&amp;1</code> 一样的效果， <code>&amp;&gt;</code> 运算符指的是同时把命令的 stdout 和 stderr 重定向到同一个 <code>file</code>中。</p>
+<p><strong>注意：重定向命令的参数是受顺序影响的！</strong></p>
+<p>比如： </p>
+<div class="highlight"><pre><span></span>python test.py &gt; file 2&gt;&amp;1
+</pre></div>
+
+
+<p>和命令</p>
+<div class="highlight"><pre><span></span>python test.py 2&gt;&amp;1 &gt;file
+</pre></div>
+
+
+<p>是不一样的。</p>
+<p>第一个命令的效果是：</p>
+<p><img alt="" src="images/r-3.png"></p>
+<p>但是第二个命令的效果是：</p>
+<p><img alt="" src="images/r-4.png"></p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+    </p>
+  </div>
+
+
+
+    <div class="addthis_relatedposts_inline">
+
+
+</article>
+
+    <footer>
+<p>&copy; QianPeili </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-100449520-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " 爪了个子 ",
+  "url" : "http://qianpeili.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+</body>
+</html>
