@@ -30,7 +30,7 @@
 <meta property="og:url" content="http://qianpeili.github.io"/>
 <meta property="og:image" content="/images/profile.png">
 
-  <title>爪了个子 &ndash;     Category Translation
+  <title>爪了个子 &ndash;     Tag python
 </title>
 
 </head>
@@ -77,42 +77,40 @@
 
 <article>
   <header>
-    <h2><a href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">【翻译】 Nginx 如何处理一个请求</a></h2>
+    <h2><a href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
     <p>
-          Posted on 周五 09 六月 2017 in <a href="http://qianpeili.github.io/category/translation.html">Translation</a>
+          Posted on 周五 07 四月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>
 
 
 
     </p>
   </header>
   <div>
-      <p>原文：<a href="http://nginx.org/en/docs/http/request_processing.html">How nginx processes a request</a></p>
-<p>网上不乏好的翻译，我再做一次翻译，只是为了让自己更好地理解，也方便以后自己翻阅。</p>
-<h2>Name-based virtual servers</h2>
-<p>nginx 首先需要判断哪个 Server 来处理这个请求。让我们来看一个简单的配置文件，里面定义了3个虚拟服务器，并且都监听了80端口。</p>
-<div class="highlight"><pre><span></span>server {
-    listen      80;
-    server_name example.org www.example.org;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.net www.example.net;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.com www.example.com;
-    ...
-}
+      <p>今天遇到一个问题</p>
+<p>在mysql查询日志时，发现一些unicode字符串存储变成了</p>
+<div class="highlight"><pre><span></span>u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
 </pre></div>
 
 
-<p>这份配置文件测试的情况是，nginx 根据请求头中的 …</p>
+<p>这个形式，手动加<code>\</code>虽然可行，但毕竟不是长久的办法</p>
+<p>所以最好的办法是将字符串中的内容，根据unicode格式转换成unicode</p>
+<p>代码如下:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>   
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42&quot;</span>  
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;\u(.{4})&quot;</span><span class="p">)</span>    
+<span class="n">maps</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>   
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">tmp</span>
+<span class="k">print</span> <span class="n">s</span>
+</pre></div>
+
+
+<p>就会输出原先代表的文字意思了</p>
+<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>
       <br>
-      <a class="btn" href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">    Continue reading
+      <a class="btn" href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">    Continue reading
 </a>
   </div>
 </article>

@@ -30,7 +30,7 @@
 <meta property="og:url" content="http://qianpeili.github.io"/>
 <meta property="og:image" content="/images/profile.png">
 
-  <title>爪了个子 &ndash;     Category Translation
+  <title>爪了个子 &ndash;     Tag tcp
 </title>
 
 </head>
@@ -77,42 +77,21 @@
 
 <article>
   <header>
-    <h2><a href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">【翻译】 Nginx 如何处理一个请求</a></h2>
+    <h2><a href="http://qianpeili.github.io/tcpjing-shou-shi-yan.html#tcpjing-shou-shi-yan">tcp经受时延</a></h2>
     <p>
-          Posted on 周五 09 六月 2017 in <a href="http://qianpeili.github.io/category/translation.html">Translation</a>
+          Posted on 周六 20 五月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
 
 
 
     </p>
   </header>
   <div>
-      <p>原文：<a href="http://nginx.org/en/docs/http/request_processing.html">How nginx processes a request</a></p>
-<p>网上不乏好的翻译，我再做一次翻译，只是为了让自己更好地理解，也方便以后自己翻阅。</p>
-<h2>Name-based virtual servers</h2>
-<p>nginx 首先需要判断哪个 Server 来处理这个请求。让我们来看一个简单的配置文件，里面定义了3个虚拟服务器，并且都监听了80端口。</p>
-<div class="highlight"><pre><span></span>server {
-    listen      80;
-    server_name example.org www.example.org;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.net www.example.net;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.com www.example.com;
-    ...
-}
-</pre></div>
-
-
-<p>这份配置文件测试的情况是，nginx 根据请求头中的 …</p>
+      <p>学 <code>TCP/IP</code> 协议听到最多的就是三次握手和四次挥手协议了吧。由于最近在折腾 <code>tcpdump</code> ，就想着实战抓一下 <code>tcp</code> 协议的这个握手和挥手协议。于是我在本地向内网测试机器的服务上发起了一个
+ <code>POST</code> 请求，抓到如下信息：</p>
+<div class="highlight"><pre><span></span><span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904647</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">client</span><span class="o">.</span><span class="mi">56558</span> <span class="o">&gt;</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span><span class="o">:</span> <span class="n">Flags</span> <span class="o">[</span><span class="n">S</span><span class="o">],</span> <span class="n">seq</span> <span class="mi">2090421259</span><span class="o">,</span> <span class="n">win</span> <span class="mi">64240</span><span class="o">,</span> <span class="n">options</span> <span class="o">[</span><span class="n">mss</span> <span class="mi">1460</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">wscale</span> <span class="mi">8</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">nop</span><span class="o">,</span><span class="n">sackOK</span><span class="o">],</span> <span class="n">length</span> <span class="mi">0</span>
+<span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904699</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket …</span></pre></div>
       <br>
-      <a class="btn" href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">    Continue reading
+      <a class="btn" href="http://qianpeili.github.io/tcpjing-shou-shi-yan.html#tcpjing-shou-shi-yan">    Continue reading
 </a>
   </div>
 </article>

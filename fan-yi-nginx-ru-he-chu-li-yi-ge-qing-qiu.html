@@ -22,7 +22,7 @@
 
 <meta name="author" content="QianPeili" />
 <meta name="description" content="原文：How nginx processes a request 网上不乏好的翻译，我再做一次翻译，只是为了让自己更好地理解，也方便以后自己翻阅。 Name-based virtual servers nginx 首先需要判断哪个 Server 来处理这个请求。让我们来看一个简单的配置文件，里面定义了3个虚拟服务器，并且都监听了80端口。 server { listen 80; server_name example.org www.example.org; ... } server { listen 80; server_name example.net www.example.net; ... } server { listen 80; server_name example.com www.example.com; ... } 这份配置文件测试的情况是，nginx 根据请求头中的 …" />
-<meta name="keywords" content="">
+<meta name="keywords" content="nginx">
 
 <meta property="og:site_name" content="爪了个子"/>
 <meta property="og:title" content="【翻译】 Nginx 如何处理一个请求"/>
@@ -33,7 +33,8 @@
 <meta property="article:published_time" content="2017-06-09 20:12:00+08:00"/>
 <meta property="article:modified_time" content=""/>
 <meta property="article:author" content="http://qianpeili.github.io/author/qianpeili.html">
-<meta property="article:section" content="note"/>
+<meta property="article:section" content="Translation"/>
+<meta property="article:tag" content="nginx"/>
 <meta property="og:image" content="/images/profile.png">
 
   <title>爪了个子 &ndash; 【翻译】 Nginx 如何处理一个请求</title>
@@ -83,7 +84,7 @@
       
     <h1 id="fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">【翻译】 Nginx 如何处理一个请求</h1>
     <p>
-          Posted on 周五 09 六月 2017 in <a href="http://qianpeili.github.io/category/note.html">note</a>
+          Posted on 周五 09 六月 2017 in <a href="http://qianpeili.github.io/category/translation.html">Translation</a>
 
 
     </p>
@@ -234,6 +235,7 @@ server {
   </div>
   <div class="tag-cloud">
     <p>
+      <a href="http://qianpeili.github.io/tag/nginx.html">nginx</a>
     </p>
   </div>
 

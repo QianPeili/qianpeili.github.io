@@ -30,7 +30,7 @@
 <meta property="og:url" content="http://qianpeili.github.io"/>
 <meta property="og:image" content="/images/profile.png">
 
-  <title>爪了个子 &ndash;     Category Translation
+  <title>爪了个子 &ndash;     Tag git
 </title>
 
 </head>
@@ -77,42 +77,27 @@
 
 <article>
   <header>
-    <h2><a href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">【翻译】 Nginx 如何处理一个请求</a></h2>
+    <h2><a href="http://qianpeili.github.io/git-submodulede-shi-yong.html#git-submodulede-shi-yong">Git Submodule的使用</a></h2>
     <p>
-          Posted on 周五 09 六月 2017 in <a href="http://qianpeili.github.io/category/translation.html">Translation</a>
+          Posted on 周二 13 六月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
 
 
 
     </p>
   </header>
   <div>
-      <p>原文：<a href="http://nginx.org/en/docs/http/request_processing.html">How nginx processes a request</a></p>
-<p>网上不乏好的翻译，我再做一次翻译，只是为了让自己更好地理解，也方便以后自己翻阅。</p>
-<h2>Name-based virtual servers</h2>
-<p>nginx 首先需要判断哪个 Server 来处理这个请求。让我们来看一个简单的配置文件，里面定义了3个虚拟服务器，并且都监听了80端口。</p>
-<div class="highlight"><pre><span></span>server {
-    listen      80;
-    server_name example.org www.example.org;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.net www.example.net;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.com www.example.com;
-    ...
-}
-</pre></div>
-
-
-<p>这份配置文件测试的情况是，nginx 根据请求头中的 …</p>
+      <h1>Submodule介绍</h1>
+<p>前几天因为项目需求，接触了<code>Git</code>的<code>Submodule</code>功能。</p>
+<p>客户端和服务端的项目各自独立开发，因为要用到一个共同的子库——SubA，SubA即需要独立保持版本信息，又需要同时给客户端和服务端的项目提供支持。<code>Submodule</code>正好可以帮助我们管理这个问题。</p>
+<h1>Submodule语法</h1>
+<div class="highlight"><pre><span></span>git submodule [--quiet] add [&lt;options&gt;] [--] &lt;repository[&lt;path&gt;]
+git submodule [--quiet] status [--cached] [--recursive] [--] [&lt;path&gt;…​]
+git submodule [--quiet] init [--] [&lt;path&gt;…​]
+git submodule [--quiet] deinit [-f|--force] (--all|[--] &lt;path&gt;…​)
+git submodule [--quiet] update [&lt;options&gt;] [--] [&lt;path&gt;…​]
+git submodule …</pre></div>
       <br>
-      <a class="btn" href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">    Continue reading
+      <a class="btn" href="http://qianpeili.github.io/git-submodulede-shi-yong.html#git-submodulede-shi-yong">    Continue reading
 </a>
   </div>
 </article>

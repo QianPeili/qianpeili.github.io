@@ -30,7 +30,7 @@
 <meta property="og:url" content="http://qianpeili.github.io"/>
 <meta property="og:image" content="/images/profile.png">
 
-  <title>爪了个子 &ndash;     Category Translation
+  <title>爪了个子 &ndash;     Tag bash
 </title>
 
 </head>
@@ -77,42 +77,26 @@
 
 <article>
   <header>
-    <h2><a href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">【翻译】 Nginx 如何处理一个请求</a></h2>
+    <h2><a href="http://qianpeili.github.io/bashshu-chu-zhong-ding-xiang.html#bashshu-chu-zhong-ding-xiang">Bash输出重定向</a></h2>
     <p>
-          Posted on 周五 09 六月 2017 in <a href="http://qianpeili.github.io/category/translation.html">Translation</a>
+          Posted on 周日 09 七月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
 
 
 
     </p>
   </header>
   <div>
-      <p>原文：<a href="http://nginx.org/en/docs/http/request_processing.html">How nginx processes a request</a></p>
-<p>网上不乏好的翻译，我再做一次翻译，只是为了让自己更好地理解，也方便以后自己翻阅。</p>
-<h2>Name-based virtual servers</h2>
-<p>nginx 首先需要判断哪个 Server 来处理这个请求。让我们来看一个简单的配置文件，里面定义了3个虚拟服务器，并且都监听了80端口。</p>
-<div class="highlight"><pre><span></span>server {
-    listen      80;
-    server_name example.org www.example.org;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.net www.example.net;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.com www.example.com;
-    ...
-}
+      <p>对 bash 命令一直不太熟，每次使用 nohup 命令都要从网上现找。
+有时会看到一些命令后面跟着 <code>"2&gt;&amp;1"</code> 的参数。比如</p>
+<div class="highlight"><pre><span></span>nohupy python test.py &gt; test.log 2&gt;&amp;1
 </pre></div>
 
 
-<p>这份配置文件测试的情况是，nginx 根据请求头中的 …</p>
+<p>之前也没有多管，直接用了。前几天又在其他人的 shell 脚本中看到 <code>"2&gt;&amp;1"</code>, 才想起去了解一下 ，现把内容整理一下做记录。</p>
+<p>主要内容借鉴于<a href="http://www.catonmat.net/blog/bash-one-liners-explained-part-three/">Bash One-Liners Explained, Part III: All about redirections - good coders code, great coders reuse</a>，原文非常详细，欢迎访问原文。</p>
+<p>当 bash 启动时，会开启三个标准文件描述符：stdin …</p>
       <br>
-      <a class="btn" href="http://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">    Continue reading
+      <a class="btn" href="http://qianpeili.github.io/bashshu-chu-zhong-ding-xiang.html#bashshu-chu-zhong-ding-xiang">    Continue reading
 </a>
   </div>
 </article>
