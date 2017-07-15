@@ -77,6 +77,36 @@
 
 <article>
   <header>
+    <h2><a href="http://qianpeili.github.io/jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti.html#jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti">解决 Git Hooks 无法运行的问题</a></h2>
+    <p>
+          Posted on 周六 15 七月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>这两天在研究 <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git Hooks</a> 的过程中，遇到一个问题。</p>
+<p>在触发钩子时，终端一直输出：</p>
+<div class="highlight"><pre><span></span><span class="n">remote</span><span class="o">:</span> <span class="n">error</span><span class="o">:</span> <span class="n">cannot</span> <span class="n">run</span> <span class="n">hooks</span><span class="o">/</span><span class="n">post</span><span class="o">-</span><span class="n">receive</span><span class="o">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="n">or</span> <span class="n">directory</span>
+</pre></div>
+
+
+<p>其实这不是文件不存在的问题，反而是文件存在，但是有问题才会出现这个提示。</p>
+<p>经过网上查找，主要有两个原因</p>
+<p><strong>一、 脚本解释器异常</strong></p>
+<p>比如不小心把 <code>/bin/bash</code> 写成了 <code>/bin/bsah</code>, 这个情况修改成正确可用的解释器即可。</p>
+<p><strong>二、 错误的换行符</strong></p>
+<p>在 windows 系统里，采用 <code>CRLF</code> 作换行符，而在 linux 下采用 <code>LF</code> 作换行符。</p>
+<p>因为我的脚本是在 windows 系统下编写完成后，直接放到 …</p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti.html#jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
     <p>
           Posted on 周五 07 四月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>

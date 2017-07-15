@@ -77,6 +77,36 @@
 
 <article>
   <header>
+    <h2><a href="http://qianpeili.github.io/jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti.html#jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti">解决 Git Hooks 无法运行的问题</a></h2>
+    <p>
+          Posted on 周六 15 七月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>这两天在研究 <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git Hooks</a> 的过程中，遇到一个问题。</p>
+<p>在触发钩子时，终端一直输出：</p>
+<div class="highlight"><pre><span></span><span class="n">remote</span><span class="o">:</span> <span class="n">error</span><span class="o">:</span> <span class="n">cannot</span> <span class="n">run</span> <span class="n">hooks</span><span class="o">/</span><span class="n">post</span><span class="o">-</span><span class="n">receive</span><span class="o">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="n">or</span> <span class="n">directory</span>
+</pre></div>
+
+
+<p>其实这不是文件不存在的问题，反而是文件存在，但是有问题才会出现这个提示。</p>
+<p>经过网上查找，主要有两个原因</p>
+<p><strong>一、 脚本解释器异常</strong></p>
+<p>比如不小心把 <code>/bin/bash</code> 写成了 <code>/bin/bsah</code>, 这个情况修改成正确可用的解释器即可。</p>
+<p><strong>二、 错误的换行符</strong></p>
+<p>在 windows 系统里，采用 <code>CRLF</code> 作换行符，而在 linux 下采用 <code>LF</code> 作换行符。</p>
+<p>因为我的脚本是在 windows 系统下编写完成后，直接放到 …</p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti.html#jie-jue-git-hooks-wu-fa-yun-xing-de-wen-ti">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="http://qianpeili.github.io/tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong.html#tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong">通过 pre-hook 判断是否推送重复的内容</a></h2>
     <p>
           Posted on 周五 14 七月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
@@ -336,36 +366,6 @@ server {
 <p>得出结果<code>{"_id": 46}</code></p>
       <br>
       <a class="btn" href="http://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">    Continue reading
-</a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">Replace Type Code With State/Strategy</a></h2>
-    <p>
-          Posted on 周一 26 十二月 2016 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
-
-
-
-    </p>
-  </header>
-  <div>
-      <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
-但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
-<p>觉得主要思想是：</p>
-<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
-<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
-<p>重构前的代码：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Movie</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-
-    <span class="nx">REGULAR</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="nx">NEW_RELEASE</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="nx">CHILDRENS</span> <span class="o">=</span> <span class="mi">2</span>
-
-    <span class="nx">def</span> <span class="nx">__init__ …</span></pre></div>
-      <br>
-      <a class="btn" href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">    Continue reading
 </a>
   </div>
 </article>

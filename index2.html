@@ -76,6 +76,36 @@
 
 <article>
   <header>
+    <h2><a href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">Replace Type Code With State/Strategy</a></h2>
+    <p>
+          Posted on 周一 26 十二月 2016 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
+但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
+<p>觉得主要思想是：</p>
+<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
+<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
+<p>重构前的代码：</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Movie</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="nx">REGULAR</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nx">NEW_RELEASE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="nx">CHILDRENS</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="nx">def</span> <span class="nx">__init__ …</span></pre></div>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="http://qianpeili.github.io/my-first-review.html#my-first-review">My First Review</a></h2>
     <p>
           Posted on 周一 05 十二月 2016 in <a href="http://qianpeili.github.io/category/review.html">Review</a>
