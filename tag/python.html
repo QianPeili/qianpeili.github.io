@@ -77,6 +77,33 @@
 
 <article>
   <header>
+    <h2><a href="http://qianpeili.github.io/tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong.html#tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong">通过 pre-hook 判断是否推送重复的内容</a></h2>
+    <p>
+          Posted on 周五 14 七月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <h1>前言</h1>
+<p>昨天运维同事找我，要求实现一个 pre-receive 钩子，在里面判断推送的文件中是否有重复的文件，如果有就拒绝此次 push。问我该如何实现。</p>
+<p>虽然觉得这个判断标准有点莫名其妙，但还是想办法实现了一下。途中遇到过很多问题，以为无法实现，不过最终还是找到了解决方法。</p>
+<h1>简单介绍</h1>
+<h2>pre-receive</h2>
+<blockquote>
+<p>参考连接： <a href="https://git-scm.com/docs/githooks#pre-receive">Git - githooks Documentation</a></p>
+</blockquote>
+<p><code>pre-receive</code> 是 Git 众多 Hooks 中的一种，在远程库中触发。当 server 端(比如：<code>gitlab</code>)收到用户的 push 内容后，在更改远程库内容前，如果 <code>pre-receive</code> 文件存在，就会执行这个文件。文件正常退出（exit 0）表示接受该次 push, 反之则拒绝。</p>
+<p>server 端执行 pre-receive 时 …</p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong.html#tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="http://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
     <p>
           Posted on 周五 07 四月 2017 in <a href="http://qianpeili.github.io/category/tips.html">Tips</a>

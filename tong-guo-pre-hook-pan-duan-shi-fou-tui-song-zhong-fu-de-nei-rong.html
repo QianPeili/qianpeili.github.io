@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+
+<meta name="author" content="QianPeili" />
+<meta name="description" content="前言 昨天运维同事找我，要求实现一个 pre-receive 钩子，在里面判断推送的文件中是否有重复的文件，如果有就拒绝此次 push。问我该如何实现。 虽然觉得这个判断标准有点莫名其妙，但还是想办法实现了一下。途中遇到过很多问题，以为无法实现，不过最终还是找到了解决方法。 简单介绍 pre-receive 参考连接： Git - githooks Documentation pre-receive 是 Git 众多 Hooks 中的一种，在远程库中触发。当 server 端(比如：gitlab)收到用户的 push 内容后，在更改远程库内容前，如果 pre-receive 文件存在，就会执行这个文件。文件正常退出（exit 0）表示接受该次 push, 反之则拒绝。 server 端执行 pre-receive 时 …" />
+<meta name="keywords" content="git, python">
+
+<meta property="og:site_name" content="爪了个子"/>
+<meta property="og:title" content="通过 pre-hook 判断是否推送重复的内容"/>
+<meta property="og:description" content="前言 昨天运维同事找我，要求实现一个 pre-receive 钩子，在里面判断推送的文件中是否有重复的文件，如果有就拒绝此次 push。问我该如何实现。 虽然觉得这个判断标准有点莫名其妙，但还是想办法实现了一下。途中遇到过很多问题，以为无法实现，不过最终还是找到了解决方法。 简单介绍 pre-receive 参考连接： Git - githooks Documentation pre-receive 是 Git 众多 Hooks 中的一种，在远程库中触发。当 server 端(比如：gitlab)收到用户的 push 内容后，在更改远程库内容前，如果 pre-receive 文件存在，就会执行这个文件。文件正常退出（exit 0）表示接受该次 push, 反之则拒绝。 server 端执行 pre-receive 时 …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://qianpeili.github.io/tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-07-14 18:20:00+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://qianpeili.github.io/author/qianpeili.html">
+<meta property="article:section" content="Note"/>
+<meta property="article:tag" content="git"/>
+<meta property="article:tag" content="python"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>爪了个子 &ndash; 通过 pre-hook 判断是否推送重复的内容</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="http://qianpeili.github.io">
+        <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
+      </a>
+      <h1><a href="http://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
+
+<p>我所见，我所想</p>
+      <nav>
+        <ul class="list">
+
+          <li><a href="/about-me.html" target="_blank">About</a></li>
+          <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/QianPeili" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-qq" href="394511725" target="_blank"><i class="fa fa-qq"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="http://qianpeili.github.io">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/authors.html">Authors</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="tong-guo-pre-hook-pan-duan-shi-fou-tui-song-zhong-fu-de-nei-rong">通过 pre-hook 判断是否推送重复的内容</h1>
+    <p>
+          Posted on 周五 14 七月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <h1>前言</h1>
+<p>昨天运维同事找我，要求实现一个 pre-receive 钩子，在里面判断推送的文件中是否有重复的文件，如果有就拒绝此次 push。问我该如何实现。</p>
+<p>虽然觉得这个判断标准有点莫名其妙，但还是想办法实现了一下。途中遇到过很多问题，以为无法实现，不过最终还是找到了解决方法。</p>
+<h1>简单介绍</h1>
+<h2>pre-receive</h2>
+<blockquote>
+<p>参考连接： <a href="https://git-scm.com/docs/githooks#pre-receive">Git - githooks Documentation</a></p>
+</blockquote>
+<p><code>pre-receive</code> 是 Git 众多 Hooks 中的一种，在远程库中触发。当 server 端(比如：<code>gitlab</code>)收到用户的 push 内容后，在更改远程库内容前，如果 <code>pre-receive</code> 文件存在，就会执行这个文件。文件正常退出（exit 0）表示接受该次 push, 反之则拒绝。</p>
+<p>server 端执行 pre-receive 时，没有参数，但会从标准输入写入一行数据：</p>
+<div class="highlight"><pre><span></span>&lt;old-value&gt; SP &lt;new-value&gt; SP &lt;ref-name&gt; LF
+</pre></div>
+
+
+<h2>Git object</h2>
+<blockquote>
+<p>参考连接：</p>
+<ul>
+<li><a href="http://shafiulazam.com/gitbook/1_the_git_object_model.html">Git Book - The Git Object Model</a></li>
+<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/ch08.html">Git Magic - Chapter 8. Secrets Revealed</a></li>
+</ul>
+</blockquote>
+<p>在使用 <code>git push</code> 命令时，终端可以看到类似下面的输出</p>
+<p><code>Writing objects: 100% (3/3), 253 bytes | 0 bytes/s, done.</code> </p>
+<p>Git 是一个内容寻址系统，即核心是通过 <code>key-value</code> 方式存储内容。 这里的 objects 就是存储的内容—— <code>value</code>，它们都由一串 40 位长度的散列码(SHA-1)所代表，即 <code>key</code>。如：</p>
+<div class="highlight"><pre><span></span>6ff87c4664981e4397625791c8ea3bbb5f2279a3
+</pre></div>
+
+
+<p>object 一共有四种类型： <strong>blob</strong>, <strong>tree</strong>, <strong>commit</strong>, <strong>tag</strong>。其中 <code>blob</code> 保存的是文件信息。
+我们可以通过 <code>git ls-tree</code> 命令查看每个 <code>commit object</code> 中保存的文件信息：</p>
+<div class="highlight"><pre><span></span>$ git ls-tree HEAD
+<span class="m">100644</span> blob 63c918c667fa005ff12ad89437f2fdc80926e21c    .gitignore
+<span class="m">100644</span> blob 5529b198e8d14decbe4ad99db3f7fb632de0439d    .mailmap
+<span class="m">100644</span> blob 6ff87c4664981e4397625791c8ea3bbb5f2279a3    COPYING
+<span class="m">040000</span> tree 2fb783e477100ce076f6bf57e4a6f026013dc745    Documentation
+<span class="m">100755</span> blob 3c0032cec592a765692234f1cba47dfdcc3a9200    GIT-VERSION-GEN
+<span class="m">100644</span> blob 289b046a443c0647624607d471289b2c7dcd470b    INSTALL
+<span class="m">100644</span> blob 4eb463797adc693dc168b926b6932ff53f17d0b1    Makefile
+<span class="m">100644</span> blob 548142c327a6790ff8821d67c2ee1eff7a656b52    README
+</pre></div>
+
+
+<h1>实现</h1>
+<h2>主要思路</h2>
+<p>文件 (blob) 的散列码由其内容决定，所以相同内容的文件的散列码是一样的，
+因此我们可以通过比较新版本中所有 blob 散列码是否重复，来判断是否存在内容相同的文件。</p>
+<h2>步骤</h2>
+<ol>
+<li>从标准输入获取到新的 commit object</li>
+<li>用 ls-tree 命令获取所有新版本的 blob 散列码</li>
+<li>判断是否存在相同的散列码，并进行对应的操作。</li>
+</ol>
+<h2>python代码</h2>
+<p>版本为 python2.7。</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">new_obj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">command_output</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span>
+        <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">output</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1"># get all blob-objects in new_obj</span>
+<span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;git ls-tree -r </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">new_obj</span>
+<span class="n">new_blobs</span> <span class="o">=</span> <span class="n">command_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+<span class="n">new_shas</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">new_blobs</span><span class="p">]</span>
+
+<span class="c1"># check if have same blob objects</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">new_shas</span><span class="p">))</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_shas</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s2">&quot;reject&quot;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s2">&quot;accept&quot;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>后续可以优化一下，输出重复的文件名称。</p>
+<p>Gist 地址： <a href="https://gist.github.com/QianPeili/ce7c2f4acc3bcd15d876ebb44f93e736">python pre-receive for check same blob object</a></p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="http://qianpeili.github.io/tag/git.html">git</a>
+      <a href="http://qianpeili.github.io/tag/python.html">python</a>
+    </p>
+  </div>
+
+
+
+    <div class="addthis_relatedposts_inline">
+
+
+</article>
+
+    <footer>
+<p>&copy; QianPeili </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-100449520-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " 爪了个子 ",
+  "url" : "http://qianpeili.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+</body>
+</html>
