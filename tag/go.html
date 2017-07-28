@@ -77,6 +77,37 @@
 
 <article>
   <header>
+    <h2><a href="http://qianpeili.github.io/fan-yi-goyu-yan-zhong-de-fan-she-ji-zhi.html#fan-yi-goyu-yan-zhong-de-fan-she-ji-zhi">【翻译】Go语言中的反射机制</a></h2>
+    <p>
+          Posted on 周五 28 七月 2017 in <a href="http://qianpeili.github.io/category/translation.html">Translation</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>原文链接： <a href="https://blog.golang.org/laws-of-reflection">The Laws of Reflection - The Go Blog</a></p>
+<p>作者： Rob Pike   </p>
+<p>翻译： 钱佩丽</p>
+<h1>介绍</h1>
+<p>反射( <code>reflection</code> )在计算机中指的是一个程序审查自身结构的能力，尤其是类型( <code>Types</code> )。
+反射是元编程的一种形式，也是让人觉得头疼的一个点。</p>
+<p>在这篇文章中，我们将对反射在 Go 中的工作原理做一些解释说明。
+各种计算机语言的反射机制不尽相同（有的甚至没有反射），
+但这篇文章，我们只关心 Go 语言中的反射，
+文中所有反射，都是在 Go 语言的背景下。</p>
+<h1>类型和接口</h1>
+<p>由于反射建立在类型机制上，所以我们先来介绍一下 Go 的类型。</p>
+<p>Go 是静态类型语言，每个变量都有一个静态的类型，就是说，在编译的时候，变量的类型必须是固定且唯一的。
+比如： <code>int</code>, <code>float32</code>, <code>*MyType …</code></p>
+      <br>
+      <a class="btn" href="http://qianpeili.github.io/fan-yi-goyu-yan-zhong-de-fan-she-ji-zhi.html#fan-yi-goyu-yan-zhong-de-fan-she-ji-zhi">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="http://qianpeili.github.io/gode-yi-lai-guan-li-gong-ju-govendor.html#gode-yi-lai-guan-li-gong-ju-govendor">Go的依赖管理工具govendor</a></h2>
     <p>
           Posted on 周一 22 五月 2017 in <a href="http://qianpeili.github.io/category/note.html">Note</a>
