@@ -76,6 +76,46 @@
 
 <article>
   <header>
+    <h2><a href="https://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">unicode小技巧</a></h2>
+    <p>
+          Posted on 周五 07 四月 2017 in <a href="https://qianpeili.github.io/category/tips.html">Tips</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>今天遇到一个问题</p>
+<p>在mysql查询日志时，发现一些unicode字符串存储变成了</p>
+<div class="highlight"><pre><span></span>u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42
+</pre></div>
+
+
+<p>这个形式，手动加<code>\</code>虽然可行，但毕竟不是长久的办法</p>
+<p>所以最好的办法是将字符串中的内容，根据unicode格式转换成unicode</p>
+<p>代码如下:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>   
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;u7528u6237u53d6u6d88u8ba2u5355u8bf7u6c42&quot;</span>  
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;\u(.{4})&quot;</span><span class="p">)</span>    
+<span class="n">maps</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>   
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">tmp</span>
+<span class="k">print</span> <span class="n">s</span>
+</pre></div>
+
+
+<p>就会输出原先代表的文字意思了</p>
+<p>注： 以上是代码是python2版本， python3需要把<code>unichr</code>改成<code>chr</code></p>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/unicodexiao-ji-qiao.html#unicodexiao-ji-qiao">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://qianpeili.github.io/yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang.html#yong-mongodbtong-ji-qu-zhong-hou-de-shu-liang">用mongodb统计去重后的数量</a></h2>
     <p>
           Posted on 周四 16 三月 2017 in <a href="https://qianpeili.github.io/category/tips.html">Tips</a>

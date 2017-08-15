@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="https://qianpeili.github.io/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="https://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="https://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+
+<meta name="author" content="QianPeili" />
+<meta name="description" content="今天要部署一个node.js的项目，第一次玩node.js有点崩溃。安装依赖的时候一个heapdump库出现了build error。 在github上找到了类似的issue： [error] heapdump@0.3.7 Build Error · Issue #72 · bnoordhuis/node-heapdump 里面提到的解决方式是升级GCC： Well, I have fixed it! My gcc version is 4.6.3 when I update to 4.9.1 and …" />
+<meta name="keywords" content="gcc, node, linux">
+
+<meta property="og:site_name" content="爪了个子"/>
+<meta property="og:title" content="升级 GCC 来解决 heapdump build Error"/>
+<meta property="og:description" content="今天要部署一个node.js的项目，第一次玩node.js有点崩溃。安装依赖的时候一个heapdump库出现了build error。 在github上找到了类似的issue： [error] heapdump@0.3.7 Build Error · Issue #72 · bnoordhuis/node-heapdump 里面提到的解决方式是升级GCC： Well, I have fixed it! My gcc version is 4.6.3 when I update to 4.9.1 and …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://qianpeili.github.io/sheng-ji-gcc-lai-jie-jue-heapdump-build-error.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-08-16 21:10:00+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://qianpeili.github.io/author/qianpeili.html">
+<meta property="article:section" content="Note"/>
+<meta property="article:tag" content="gcc"/>
+<meta property="article:tag" content="node"/>
+<meta property="article:tag" content="linux"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>爪了个子 &ndash; 升级 GCC 来解决 heapdump build Error</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="https://qianpeili.github.io">
+        <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
+      </a>
+      <h1><a href="https://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
+
+<p>我所见，我所想</p>
+      <nav>
+        <ul class="list">
+
+          <li><a href="/about-me.html" target="_blank">About</a></li>
+          <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/QianPeili" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-qq" href="394511725" target="_blank"><i class="fa fa-qq"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://qianpeili.github.io">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/authors.html">Authors</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="sheng-ji-gcc-lai-jie-jue-heapdump-build-error">升级 GCC 来解决 heapdump build Error</h1>
+    <p>
+          Posted on 周三 16 八月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>今天要部署一个<code>node.js</code>的项目，第一次玩<code>node.js</code>有点崩溃。安装依赖的时候一个<code>heapdump</code>库出现了<code>build error</code>。</p>
+<p>在<code>github</code>上找到了类似的<code>issue</code>： <a href="https://github.com/bnoordhuis/node-heapdump/issues/72">[error] heapdump@0.3.7 Build Error · Issue #72 · bnoordhuis/node-heapdump</a></p>
+<p>里面提到的解决方式是升级<code>GCC</code>：</p>
+<blockquote>
+<p>Well, I have fixed it!</p>
+<p>My gcc version is 4.6.3 when I update to 4.9.1 and retry it work!</p>
+</blockquote>
+<p>我查看了一下机器的<code>gcc</code>版本，是 4.4.7 的，问题应该就在这了。所以安装一个新版本的<code>gcc</code>应该就行了。</p>
+<p>国内为了速度可以选择中科院的镜像： <a href="http://mirrors.opencas.org/gnu/gcc/">Index of /gnu/gcc/</a></p>
+<p>我选择了 6.1.0 版本，下载源码后简单地根据官方教程 <a href="https://gcc.gnu.org/wiki/InstallingGCC">InstallingGCC - GCC Wiki</a>
+进行安装。</p>
+<div class="highlight"><pre><span></span>tar xzf gcc-6.1.0.tar.gz
+cd gcc-6.1.0
+./contrib/download_prerequisites
+cd ..
+mkdir objdir
+cd objdir
+$PWD/../gcc-6.1.0/configure --prefix=$HOME/gcc-6.1.0 --disable-multilib
+</pre></div>
+
+
+<p>因为<code>gcc</code>编译真的要好久好久，所以我用上了全部 cpu 核心。</p>
+<div class="highlight"><pre><span></span>make -j 16
+make -j 16 install
+</pre></div>
+
+
+<p>替换旧版的<code>gcc</code></p>
+<div class="highlight"><pre><span></span>mv /usr/bin/gcc /usr/bin/gcc-4.4.7
+ln -s $HOME/gcc-6.1.0/bin/gcc /usr/bin/gcc
+
+mv /usr/bin/g++ /usr/bin/++-4.4.7
+ln -s $HOME/gcc-6.1.0/bin/g++ /usr/bin/g++
+</pre></div>
+
+
+<p>装完后再执行<code>npm install</code>就一切顺利了~</p>
+<p>升级<code>gcc</code>后可能会引起动态库不一致的问题，可以参考这篇文章进行处理。</p>
+<p><a href="https://itbilu.com/linux/management/NymXRUieg.html">解决类似 /usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21' not found 的问题 - IT笔录</a></p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://qianpeili.github.io/tag/gcc.html">gcc</a>
+      <a href="https://qianpeili.github.io/tag/node.html">node</a>
+      <a href="https://qianpeili.github.io/tag/linux.html">linux</a>
+    </p>
+  </div>
+
+
+
+    <div class="addthis_relatedposts_inline">
+
+
+</article>
+
+    <footer>
+<p>&copy; QianPeili </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-100449520-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " 爪了个子 ",
+  "url" : "https://qianpeili.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+</body>
+</html>
