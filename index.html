@@ -76,6 +76,36 @@
 
 <article>
   <header>
+    <h2><a href="https://qianpeili.github.io/go-de-requestbody-rewind-gong-neng.html#go-de-requestbody-rewind-gong-neng">go 的request.Body rewind 功能</a></h2>
+    <p>
+          Posted on 周六 16 九月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>近日参加了实验楼的 <a href="https://www.shiyanlou.com/contests/lou15">楼赛 第15期 Go语言项目挑战 - 实验楼</a></p>
+<p>第一道题的题目要求是：</p>
+<blockquote>
+<p>实现一个简单的数据校验功能，对请求 body 做 md5 计算，然后把结果转为十六进制添加到请求 header 中，头部名称为X-Md5。也就是在HTTP 请求 header 中添加一个 X-Md5: <hex md5 of body> 键值对，如果body为空那么就不填。</p>
+</blockquote>
+<p>我一开始的实现方式很直接暴力：</p>
+<div class="highlight"><pre><span></span>func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
+
+    if req.Body == nil {
+        return t.RoundTripper.RoundTrip(req)
+    }
+    b, err := ioutil.ReadAll(req.Body)
+    if …</pre></div>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/go-de-requestbody-rewind-gong-neng.html#go-de-requestbody-rewind-gong-neng">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://qianpeili.github.io/sheng-ji-gcc-lai-jie-jue-heapdump-build-error.html#sheng-ji-gcc-lai-jie-jue-heapdump-build-error">升级 GCC 来解决 heapdump build Error</a></h2>
     <p>
           Posted on 周三 16 八月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
@@ -325,24 +355,6 @@ server {
 <span class="mi">15</span><span class="o">:</span><span class="mi">05</span><span class="o">:</span><span class="mf">03.904699</span> <span class="n">IP</span> <span class="n">socket</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="mi">3000</span> <span class="o">&gt;</span> <span class="n">socket …</span></pre></div>
       <br>
       <a class="btn" href="https://qianpeili.github.io/tcpjing-shou-shi-yan.html#tcpjing-shou-shi-yan">    Continue reading
-</a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://qianpeili.github.io/tcpdumpde-shi-yong-shi-li.html#tcpdumpde-shi-yong-shi-li">tcpdump的使用实例</a></h2>
-    <p>
-          Posted on 周六 20 五月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
-
-
-
-    </p>
-  </header>
-  <div>
-      <p>给出了一些tcpdump的使用例子，实践才是学习的好办法~</p>
-      <br>
-      <a class="btn" href="https://qianpeili.github.io/tcpdumpde-shi-yong-shi-li.html#tcpdumpde-shi-yong-shi-li">    Continue reading
 </a>
   </div>
 </article>
