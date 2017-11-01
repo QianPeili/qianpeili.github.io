@@ -77,6 +77,31 @@
 
 <article>
   <header>
+    <h2><a href="https://qianpeili.github.io/gokua-ping-tai-bian-yi.html#gokua-ping-tai-bian-yi">Go跨平台编译</a></h2>
+    <p>
+          Posted on 周三 01 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>公司开发系统是 Windows，服务器部署环境是 Linux。一开始测试的时候选的是 git pull 带生产机上，编译后启动。</p>
+<p>但这个方法太笨，一是代码容易泄露，二是生产机要同时同步库文件，不管是 go get 方式还是 govendor 方式都显得太麻烦。</p>
+<p>不过好在 Go 的跨平台编译非常方便，所以我们完全可以在开发环境下编译好可执行文件，再放入生产机部署。</p>
+<p>总结一下 windows环境下 go 跨平台编译的方式。</p>
+<h2>GOOS 和 GOARCH</h2>
+<p>关于这两个环境变量的含义，我们可以从官方文档： <a href="https://golang.org/doc/install/source#environment">Installing Go from source - The Go Programming Language</a>中了解，分别是目标系统的 <code>操作系统</code> 和 <code>编译架构</code>。只要我们设置好这两个参数的内容，就可以轻松进行跨平台编译了。</p>
+<p>支持的列表</p>
+<div class="highlight"><pre><span></span>$GOOS   $GOARCH …</pre></div>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/gokua-ping-tai-bian-yi.html#gokua-ping-tai-bian-yi">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://qianpeili.github.io/go-de-requestbody-rewind-gong-neng.html#go-de-requestbody-rewind-gong-neng">go 的request.Body rewind 功能</a></h2>
     <p>
           Posted on 周六 16 九月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
