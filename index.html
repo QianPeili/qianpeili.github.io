@@ -76,6 +76,47 @@
 
 <article>
   <header>
+    <h2><a href="https://qianpeili.github.io/da-yin-go-de-stack-trace.html#da-yin-go-de-stack-trace">打印 Go 的Stack Trace</a></h2>
+    <p>
+          Posted on 周六 04 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>算是写了第一个比较正式的 <code>Go</code> 项目吧，然后现在在考虑如何设计日志系统。</p>
+<p>服务采用 <code>TCP</code> 长连接，每个 <code>session</code> 都是单独启动一个 <code>goroutine</code> 处理事务（其实发消息也有一个协程，不过发消息部分逻辑简单），所以考虑在最顶层写一个 <code>recover</code> 函数，收集上报的错误信息并输出。大致是这么个东西：</p>
+<div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;log&quot;</span>
+    <span class="s2">&quot;errors&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">defer</span> <span class="n">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="p">:</span><span class="o">=</span> <span class="n">recover</span><span class="p">();</span> <span class="n">r</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+
+    <span class="o">//</span> <span class="n">make</span> <span class="n">a</span> <span class="n">panic</span>
+    <span class="n">panic</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s2">&quot;ha! A bug&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>输出： <code>2017/11/04 17 …</code></p>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/da-yin-go-de-stack-trace.html#da-yin-go-de-stack-trace">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://qianpeili.github.io/gokua-ping-tai-bian-yi.html#gokua-ping-tai-bian-yi">Go跨平台编译</a></h2>
     <p>
           Posted on 周三 01 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
@@ -331,34 +372,6 @@ server {
 <p>这份配置文件测试的情况是，nginx 根据请求头中的 …</p>
       <br>
       <a class="btn" href="https://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">    Continue reading
-</a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://qianpeili.github.io/gode-yi-lai-guan-li-gong-ju-govendor.html#gode-yi-lai-guan-li-gong-ju-govendor">Go的依赖管理工具govendor</a></h2>
-    <p>
-          Posted on 周一 22 五月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
-
-
-
-    </p>
-  </header>
-  <div>
-      <p>依赖管理是我接触 go 以来，觉得比较麻烦的事情。
-不过在 go-1.5 版本中，出现了一个 <code>vendor</code> 的概念，并且 <code>vendor</code> 作为一个默认功能存在于1.7之后的版本中。</p>
-<p>vendor的概念就类似于python中的 <code>virtualenv</code> 建立的 <code>env</code>，它是一个文件夹，里面存放了项目所用的依赖。如果项目中有个文件 import 了第三方的 package，而这个 package 又存在项目的 vendor 目录中，这个文件编译的时候会从 vendor 中 import 这个 package</p>
-<p>比如：</p>
-<div class="highlight"><pre><span></span>$GOPATH
-|   src/
-|   |   project/
-|   |   |   main.go
-|   |   |   vendor/
-|   |   |   |   github.com/pkg/sftp/
-|   |   |   |   golang.org/x …</pre></div>
-      <br>
-      <a class="btn" href="https://qianpeili.github.io/gode-yi-lai-guan-li-gong-ju-govendor.html#gode-yi-lai-guan-li-gong-ju-govendor">    Continue reading
 </a>
   </div>
 </article>

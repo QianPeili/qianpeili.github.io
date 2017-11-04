@@ -30,7 +30,7 @@
 <meta property="og:url" content="https://qianpeili.github.io"/>
 <meta property="og:image" content="/images/profile.png">
 
-  <title>爪了个子 &ndash;     Tags
+  <title>爪了个子 &ndash;     Category Note
 </title>
 
 </head>
@@ -73,28 +73,47 @@
 
     </nav>
 
-<article class="single">
+
+
+<article>
   <header>
-    <h1>    Tags
-</h1>
+    <h2><a href="https://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">Replace Type Code With State/Strategy</a></h2>
+    <p>
+          Posted on 周一 26 十二月 2016 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
   </header>
   <div>
-    <ul class="list">          <li><a href="https://qianpeili.github.io/tag/bash.html">bash</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/gcc.html">gcc</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/git.html">git</a> (3)</li>
-          <li><a href="https://qianpeili.github.io/tag/go.html">go</a> (5)</li>
-          <li><a href="https://qianpeili.github.io/tag/linux.html">linux</a> (3)</li>
-          <li><a href="https://qianpeili.github.io/tag/mongodb.html">mongodb</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/nginx.html">nginx</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/node.html">node</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/python.html">python</a> (2)</li>
-          <li><a href="https://qianpeili.github.io/tag/tcp.html">tcp</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/tcpdump.html">tcpdump</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/unicode.html">unicode</a> (1)</li>
-          <li><a href="https://qianpeili.github.io/tag/vendor.html">vendor</a> (1)</li>
-    </ul>
+      <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
+但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
+<p>觉得主要思想是：</p>
+<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
+<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
+<p>重构前的代码：</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Movie</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="nx">REGULAR</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nx">NEW_RELEASE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="nx">CHILDRENS</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="nx">def</span> <span class="nx">__init__ …</span></pre></div>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">    Continue reading
+</a>
   </div>
 </article>
+
+  <div class="pagination">
+    <a class="btn float-right" href="https://qianpeili.github.io/category/note.html">
+          Newer Posts
+ <i class="fa fa-angle-right"></i>
+    </a>
+  </div>
+
+
+
 
     <footer>
 <p>&copy; QianPeili </p>

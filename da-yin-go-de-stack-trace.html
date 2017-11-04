@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="https://qianpeili.github.io/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="https://qianpeili.github.io/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="https://qianpeili.github.io/theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+
+<meta name="author" content="QianPeili" />
+<meta name="description" content="算是写了第一个比较正式的 Go 项目吧，然后现在在考虑如何设计日志系统。 服务采用 TCP 长连接，每个 session 都是单独启动一个 goroutine 处理事务（其实发消息也有一个协程，不过发消息部分逻辑简单），所以考虑在最顶层写一个 recover 函数，收集上报的错误信息并输出。大致是这么个东西： package main import ( &#34;log&#34; &#34;errors&#34; ) func main() { defer func() { if r := recover(); r != nil { log.Println(r) } }() // make a panic panic(errors.New(&#34;ha! A bug&#34;)) } 输出： 2017/11/04 17 …" />
+<meta name="keywords" content="go">
+
+<meta property="og:site_name" content="爪了个子"/>
+<meta property="og:title" content="打印 Go 的Stack Trace"/>
+<meta property="og:description" content="算是写了第一个比较正式的 Go 项目吧，然后现在在考虑如何设计日志系统。 服务采用 TCP 长连接，每个 session 都是单独启动一个 goroutine 处理事务（其实发消息也有一个协程，不过发消息部分逻辑简单），所以考虑在最顶层写一个 recover 函数，收集上报的错误信息并输出。大致是这么个东西： package main import ( &#34;log&#34; &#34;errors&#34; ) func main() { defer func() { if r := recover(); r != nil { log.Println(r) } }() // make a panic panic(errors.New(&#34;ha! A bug&#34;)) } 输出： 2017/11/04 17 …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://qianpeili.github.io/da-yin-go-de-stack-trace.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-11-04 17:42:00+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://qianpeili.github.io/author/qianpeili.html">
+<meta property="article:section" content="Note"/>
+<meta property="article:tag" content="go"/>
+<meta property="og:image" content="/images/profile.png">
+
+  <title>爪了个子 &ndash; 打印 Go 的Stack Trace</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="https://qianpeili.github.io">
+        <img src="/images/profile.png" alt="爪了个子(QianPeili)" title="爪了个子(QianPeili)">
+      </a>
+      <h1><a href="https://qianpeili.github.io">爪了个子(QianPeili)</a></h1>
+
+<p>我所见，我所想</p>
+      <nav>
+        <ul class="list">
+
+          <li><a href="/about-me.html" target="_blank">About</a></li>
+          <li><a href="mailto:qianperry@outlook.com" target="_blank">Email</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/QianPeili" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-qq" href="394511725" target="_blank"><i class="fa fa-qq"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://qianpeili.github.io">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/authors.html">Authors</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="da-yin-go-de-stack-trace">打印 Go 的Stack Trace</h1>
+    <p>
+          Posted on 周六 04 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>算是写了第一个比较正式的 <code>Go</code> 项目吧，然后现在在考虑如何设计日志系统。</p>
+<p>服务采用 <code>TCP</code> 长连接，每个 <code>session</code> 都是单独启动一个 <code>goroutine</code> 处理事务（其实发消息也有一个协程，不过发消息部分逻辑简单），所以考虑在最顶层写一个 <code>recover</code> 函数，收集上报的错误信息并输出。大致是这么个东西：</p>
+<div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;log&quot;</span>
+    <span class="s2">&quot;errors&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">defer</span> <span class="n">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="p">:</span><span class="o">=</span> <span class="n">recover</span><span class="p">();</span> <span class="n">r</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+
+    <span class="o">//</span> <span class="n">make</span> <span class="n">a</span> <span class="n">panic</span>
+    <span class="n">panic</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s2">&quot;ha! A bug&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>输出： <code>2017/11/04 17:19:16 ha! A bug</code></p>
+<p>但如果只是这样，其实并不能帮助我们很好的排查问题，我们知道有了一个 <code>BUG</code>，但不知道是哪里除了问题。因此我们打印出捕获错误时的 Stack Trace。内建库 <code>runtime</code> 就有这个功能：</p>
+<p><strong>func Stack(buf []byte, all bool) int</strong></p>
+<div class="highlight"><pre><span></span>Stack formats a stack trace of the calling goroutine into buf and returns the number of bytes written to buf. If all is true, Stack formats stack traces of all other goroutines into buf after the trace for the current goroutine.
+</pre></div>
+
+
+<p>不过更方便的是使用 <code>runtime/debug</code> 的 <code>Stack()</code> 功能：</p>
+<div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;log&quot;</span>
+    <span class="s2">&quot;errors&quot;</span>
+    <span class="s2">&quot;runtime/debug&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">defer</span> <span class="n">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="p">:</span><span class="o">=</span> <span class="n">recover</span><span class="p">();</span> <span class="n">r</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">debug</span><span class="o">.</span><span class="n">Stack</span><span class="p">())</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+
+    <span class="o">//</span> <span class="n">make</span> <span class="n">a</span> <span class="n">panic</span>
+    <span class="n">panic</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s2">&quot;ha! A bug&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>现在我们可以看到更明确的错误情况：</p>
+<div class="highlight"><pre><span></span>2017/11/04 17:33:31 ha! A bug
+goroutine 1 [running]:
+runtime/debug.Stack(0xc04205be80, 0x4baa00, 0xc0420301c0)
+    C:/Go/src/runtime/debug/stack.go:24 +0xae
+main.main.func1()
+    D:/Projects/mygo/src/Test/example/main.go:13 +0x75
+panic(0x4baa00, 0xc0420301c0)
+    C:/Go/src/runtime/panic.go:491 +0x291
+main.main()
+    D:/Projects/mygo/src/Test//example/main.go:19 +0xc9
+</pre></div>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://qianpeili.github.io/tag/go.html">go</a>
+    </p>
+  </div>
+
+
+
+    <div class="addthis_relatedposts_inline">
+
+
+</article>
+
+    <footer>
+<p>&copy; QianPeili </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-100449520-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " 爪了个子 ",
+  "url" : "https://qianpeili.github.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+
+</body>
+</html>

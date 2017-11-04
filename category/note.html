@@ -77,6 +77,47 @@
 
 <article>
   <header>
+    <h2><a href="https://qianpeili.github.io/da-yin-go-de-stack-trace.html#da-yin-go-de-stack-trace">打印 Go 的Stack Trace</a></h2>
+    <p>
+          Posted on 周六 04 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p>算是写了第一个比较正式的 <code>Go</code> 项目吧，然后现在在考虑如何设计日志系统。</p>
+<p>服务采用 <code>TCP</code> 长连接，每个 <code>session</code> 都是单独启动一个 <code>goroutine</code> 处理事务（其实发消息也有一个协程，不过发消息部分逻辑简单），所以考虑在最顶层写一个 <code>recover</code> 函数，收集上报的错误信息并输出。大致是这么个东西：</p>
+<div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;log&quot;</span>
+    <span class="s2">&quot;errors&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">defer</span> <span class="n">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="p">:</span><span class="o">=</span> <span class="n">recover</span><span class="p">();</span> <span class="n">r</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+
+    <span class="o">//</span> <span class="n">make</span> <span class="n">a</span> <span class="n">panic</span>
+    <span class="n">panic</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s2">&quot;ha! A bug&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>输出： <code>2017/11/04 17 …</code></p>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/da-yin-go-de-stack-trace.html#da-yin-go-de-stack-trace">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://qianpeili.github.io/gokua-ping-tai-bian-yi.html#gokua-ping-tai-bian-yi">Go跨平台编译</a></h2>
     <p>
           Posted on 周三 01 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
@@ -298,39 +339,13 @@ git submodule …</pre></div>
       <a class="btn" href="https://qianpeili.github.io/tcpdumpde-shi-yong-shi-li.html#tcpdumpde-shi-yong-shi-li">    Continue reading
 </a>
   </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">Replace Type Code With State/Strategy</a></h2>
-    <p>
-          Posted on 周一 26 十二月 2016 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
-
-
-
-    </p>
-  </header>
-  <div>
-      <p>今天在阅读《重构：改善既有代码的设计》第一个案例中，遇到了一个<strong>replace type code with state/strategy</strong>的概念，不是很了解，
-但大概懂了意思。决定用<code>python</code>实现一下其代码。</p>
-<p>觉得主要思想是：</p>
-<p>一个对象(<code>Movie</code>)有一个属性(<code>price_code</code>)，这个属性的不同会导致对象的方法(<code>get_charge</code>)返回不同的结果。</p>
-<p>最开始的想法肯定是用subclass进行分类，但是一部电影可以更换<code>price_code</code>，一个对象没法更换其所属类，所以直接建立一个<code>price</code>对象作为属性，改变<code>price_code</code>时，即改变了<code>price</code>对象。</p>
-<p>重构前的代码：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Movie</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-
-    <span class="nx">REGULAR</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="nx">NEW_RELEASE</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="nx">CHILDRENS</span> <span class="o">=</span> <span class="mi">2</span>
-
-    <span class="nx">def</span> <span class="nx">__init__ …</span></pre></div>
-      <br>
-      <a class="btn" href="https://qianpeili.github.io/replace-type-code-with-statestrategy.html#replace-type-code-with-statestrategy">    Continue reading
-</a>
-  </div>
 </article>
 
   <div class="pagination">
+    <a class="btn float-left" href="https://qianpeili.github.io/category/note2.html">
+      <i class="fa fa-angle-left"></i>     Older Posts
+
+    </a>
   </div>
 
 
