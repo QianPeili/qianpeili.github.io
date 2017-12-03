@@ -76,6 +76,33 @@
 
 <article>
   <header>
+    <h2><a href="https://qianpeili.github.io/gode-appendshi-yong-cai-keng-ji-lu.html#gode-appendshi-yong-cai-keng-ji-lu">Go的append使用踩坑记录</a></h2>
+    <p>
+          Posted on 周日 03 十二月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
+
+
+
+    </p>
+  </header>
+  <div>
+      <p><code>go</code> 有个很好用的数据类型——<code>slice</code>，有点类似 <code>python</code> 里的 <code>list</code>。<code>go</code> 中给 <code>slice</code> 添加元素，用的是 <code>append</code> 函数，它跟<code>python</code>中的<code>list.append</code>方法有些不同，每次都会返回一个对象，所以我之前一直都把<code>go</code>中的<code>append</code>当做<code>python</code>中的 <code>+</code> 变形。</p>
+<p>在我之前的理解中，某些情况下，两者其实是差不多的，比如：</p>
+<p><code>go</code> 代码</p>
+<div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="s2">&quot;log&quot;</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="p">:</span><span class="o">=</span> <span class="p">[]</span><span class="nb">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">[]</span><span class="nb">int</span><span class="p">{</span><span class="mi">3 …</span></pre></div>
+      <br>
+      <a class="btn" href="https://qianpeili.github.io/gode-appendshi-yong-cai-keng-ji-lu.html#gode-appendshi-yong-cai-keng-ji-lu">    Continue reading
+</a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://qianpeili.github.io/da-yin-go-de-stack-trace.html#da-yin-go-de-stack-trace">打印 Go 的Stack Trace</a></h2>
     <p>
           Posted on 周六 04 十一月 2017 in <a href="https://qianpeili.github.io/category/note.html">Note</a>
@@ -330,48 +357,6 @@ git submodule [--quiet] update [&lt;options&gt;] [--] [&lt;path&gt;…​]
 git submodule …</pre></div>
       <br>
       <a class="btn" href="https://qianpeili.github.io/git-submodulede-shi-yong.html#git-submodulede-shi-yong">    Continue reading
-</a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">【翻译】 Nginx 如何处理一个请求</a></h2>
-    <p>
-          Posted on 周五 09 六月 2017 in <a href="https://qianpeili.github.io/category/translation.html">Translation</a>
-
-
-
-    </p>
-  </header>
-  <div>
-      <p>原文：<a href="http://nginx.org/en/docs/http/request_processing.html">How nginx processes a request</a></p>
-<p>网上不乏好的翻译，我再做一次翻译，只是为了让自己更好地理解，也方便以后自己翻阅。</p>
-<h2>Name-based virtual servers</h2>
-<p>nginx 首先需要判断哪个 Server 来处理这个请求。让我们来看一个简单的配置文件，里面定义了3个虚拟服务器，并且都监听了80端口。</p>
-<div class="highlight"><pre><span></span>server {
-    listen      80;
-    server_name example.org www.example.org;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.net www.example.net;
-    ...
-}
-
-server {
-    listen      80;
-    server_name example.com www.example.com;
-    ...
-}
-</pre></div>
-
-
-<p>这份配置文件测试的情况是，nginx 根据请求头中的 …</p>
-      <br>
-      <a class="btn" href="https://qianpeili.github.io/fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu.html#fan-yi-nginx-ru-he-chu-li-yi-ge-qing-qiu">    Continue reading
 </a>
   </div>
 </article>
