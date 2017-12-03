@@ -144,6 +144,15 @@ func append(slice []Type, elems ...Type) []Type</em></p>
 <p>注释中 <strong>If it has sufficient capacity, the destination is resliced to accommodate the
 new elements.</strong> 说明了，如果被传入的切片拥有足够容量，那么被添加的元素会直接放到该切片空闲的位置上去。也就是说，<code>append</code> 并不是一定返回一个新的 <code>slice</code> 对象，也有可能是改变了原先的对象并返回。</p>
 <p>对 <code>go</code> 的切片进行选取时，如果位置是从 <code>0</code> 开始，那么这个新选取的切片会继承原有切片的容量，所以在上面的例子中, <code>a[0:2]</code> 的长度是2，容量是依旧是5。因此 <code>append</code> 操作会直接在原先的 <code>a</code> 上进行赋值操作。</p>
+<p>正确的实现方式：</p>
+<div class="highlight"><pre><span></span>a := []int{1, 2, 3, 4, 5}
+tmp := make([]int, 2, 2)
+copy(tmp, a[:2])
+b := append(tmp, a[3:5]...)
+log.Println(a, b)
+</pre></div>
+
+
 <p><code>go</code> 的 <code>append</code> 其实既不是 <code>python</code> 中的 <code>+</code> 也不是 <code>list.append</code>，它们有很多不同。</p>
 <p><em>ps: 下面是对一些容易搞混的 <code>append</code> 操作的记录</em></p>
 <div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">main</span>
